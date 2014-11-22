@@ -4,3 +4,6 @@ from django.http import HttpResponseRedirect,HttpResponse
 
 def index(request):
     return render(request,'index.html')
+
+def impressum(request):
+    return render(request,'impressum.html')

@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Potsdam-Babelsberg letzte Nacht</h3>
+        <div class="plot">
+        </div>
+        <h3>Sponsored by</h3>
+        <div class="attribution">
+            <div class="pull-left">
+                <img class="aip-logo" src="{% static 'img/AIP_logo.jpg' %}"></img>
+            </div>  
+            <div class="pull-right">
+                <img src="{% static 'img/bmbf_logo.jpg' %}"></img>
+                <img src="{% static 'img/gavo_logo.png' %}"></img>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h2>Wie hell ist die Nacht?</h2>
+
+        <p>
+            Die Betrachtung des Sternenhimmels ist nur im Dunkeln, im Allgemeinen des nachts möglich. Diese banal anmutende Feststellung zieht Fragen nach sich: Wie dunkel muss der Himmel sein, um die Sterne beobachten zu können? Wie hell ist die Nacht?
+        </p>
+        <p>
+            Das Sternenlicht 'ertrinkt' im Lichtermeer unserer Großstädte. Etwa die Hälfte der mitteleuropäischen Bevolkerung kann selbst bei sonst besten Beobachtungsbedingungen die Milchstraße prinzipiell nicht erkennen.
+        </p>
+        <p>
+            Der Lichterteppich wächst, lokal und weltweit. Aber wie schnell und was sind die treibenden Faktoren? Mit einer langfristig angelegten Messkampagne sollen die Grundlagen für eine empirische Studie zur Charakterisierung der Nachthimmelshelligkeit im Berlin/Potsdamer Raum geschaffen werden. Beobachtungen vom Standort Teide-Observatorium auf Teneriffa dienen als Referenz zum Vergleich mit den lokalen Beobachtungen.
+        </p>
+        <p>
+            Kommerzielle Lichtsensoren vom Typ SQM und MarkPro wurden in einem Messnetz in und um Berlin aufgestellt und liefern einen kontinuierlichen Datenstrom, der den Verlauf der Nachthimmelshelligkeit beschreibt. Ein am Standort Babelsberg aufgenommenes und täglich aktualisiertes Beispiel ist im Diagrammblock links oben dargestellt.
+        </p>
+    </div>
+</div>
+{% endblock %}
