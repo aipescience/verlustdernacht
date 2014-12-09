@@ -93,3 +93,7 @@ h3:first-child {
     width: 100%;
     margin-bottom: 10px;
 }
+.attribution img.aip-logo {
+    width: 75%;
+    margin-left: 10%;
+}

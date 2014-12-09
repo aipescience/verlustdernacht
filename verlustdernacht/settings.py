@@ -43,3 +43,5 @@ STATICFILES_DIRS = (
 TEMPLATE_DIRS = (
     os.path.join(SITE_ROOT,'verlustdernacht/templates/'),
 )
+
+DATABASE_ROUTERS = ['verlustdernacht.routers.Router']
