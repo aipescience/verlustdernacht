@@ -8,6 +8,15 @@ p {
     font-size: 12px;
     color: #aaa;
 }
+a,
+a:visited,
+a:focus {
+    color: #aaa;
+}
+a:hover {
+    color: #f2fa61;
+    text-decoration: none;
+}
 h2 { 
     font-size: 16px;
     line-height: 20px;
@@ -27,6 +36,7 @@ h3:first-child {
 }
 .container {
     margin-top: 20px;
+    margin-bottom: 60px;
     border: 1px solid #aaa;
     background-color: #101020;
 }
@@ -58,21 +68,28 @@ h3:first-child {
     border-top: 1px solid #aaa;
 }
 .navigation .row div a {
+    color: white;
     display: block;
     height: 30px;
     line-height: 30px;
     text-align: center;
-    color: #fff;
 }
 .footer div.pull-right a {
+    color: white;
     display: block;
     height: 30px;
     line-height: 30px;
-    color: #fff;
     margin-left: 15px;
     margin-right: 15px;
 }
-
+.navigation .row div a,
+.footer div.pull-right a {
+    color: white;
+}
+.navigation .row div a:hover,
+.footer div.pull-right a:hover {
+    color: #f2fa61;
+}
 /* content */
 
 .content {
@@ -81,9 +98,17 @@ h3:first-child {
     min-height: 400px;
 }
 
-.plot {
-    height: 200px;
+.box {
     border: 1px solid #aaa;
+}
+.home-plot {
+    height: 200px;
+}
+.data-plot {
+    height: 400px;
+}
+.data-form {
+    height: 200px;
 }
 .attribution > div {
     width: 48%;
@@ -96,4 +121,13 @@ h3:first-child {
 .attribution img.aip-logo {
     width: 75%;
     margin-left: 10%;
+}
+.site-form button {
+    width: 80px;
+}
+.site-form button:first-child {
+    float: left;
+}
+.site-form button:last-child {
+    float: right;
 }

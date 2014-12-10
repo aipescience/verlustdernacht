@@ -5,5 +5,6 @@ from lmdb import urls
 urlpatterns = patterns('',
     url(r'^$', 'verlustdernacht.views.index'),
     url(r'^impressum$', 'verlustdernacht.views.impressum'),
+    url(r'^data$', 'verlustdernacht.views.data'),
     url(r'^api/', include(urls)),
 )
