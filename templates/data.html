@@ -9,35 +9,45 @@
 
 <div class="row" ng-app="data" ng-controller="DataController">
     <div class="col-md-9">
+
         <h2>Data for Babelsberg</h2>
         <div class="box data-plot"></div>
+
     </div>
     <div class="col-md-3">
+
         <h2>Site information</h2>
-        {% verbatim %}
+
         <dl>
-            <dt>Location</dt><dd>{{site.location}}</dd>
-            <dt>Device</dt><dd>{{site.device}}</dd>
-            <dt>Longitude</dt><dd>{{site.lon}}</dd>
-            <dt>Latitude</dt><dd>{{site.lat}}</dd>
+            <dt>Location</dt>
+            <dd>{$ service.location.name $}</dd>
+
+            <dt>Device</dt>
+            <dd>{$ service.location.device $}</dd>
+
+            <dt>Longitude</dt>
+            <dd>{$ service.location.longitude $}</dd>
+
+            <dt>Latitude</dt>
+            <dd>{$ service.location.latitude $}</dd>
         </dl>
-        {% endverbatim %}
+
         <form name="SiteForm" class="site-form">
             <div class="form-group">
+
                 <label for="site">Select different site</label>
-                <select name="site" id="site" class="form-control">
-                    <option value="Babelsberg">Babelsberg</option>
+                <select id="site" class="form-control"
+                    ng-model="service.location.slug"
+                    ng-options="location.slug as location.name for location in service.locations">
                 </select>
-            </div>
-            <div class="form-group">
-                <label for="date">Select date</label>
-                <input type="text" name="date" id="date" class="form-control"></input>
 
             </div>
+
             <div class="form-group">
-                <button class="btn">Previous</button>
-                <button class="btn">Next</button>
+                <label for="date">Select date</label>
+                <input type="date" id="date" class="form-control" ng-model="service.date"></input>
             </div>
+
         </form>
     </div>
 </div>

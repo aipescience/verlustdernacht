@@ -1,7 +1,12 @@
 from rest_framework import serializers
 
-from .models import Measurement
+from .models import Location, Measurement
 
+
+class LocationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Location
 
 class MeasurementSerializer(serializers.ModelSerializer):
 

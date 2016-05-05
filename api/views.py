@@ -5,13 +5,35 @@ from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
 from .models import Location, Measurement
-from .serializers import MeasurementSerializer
+from .serializers import LocationSerializer, MeasurementSerializer
+
+
+class LocationViewSet(ReadOnlyModelViewSet):
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer
 
 
 class MeasurementViewSet(ReadOnlyModelViewSet):
-    queryset = Measurement.objects.all()
+
     serializer_class = MeasurementSerializer
     pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        queryset = Measurement.objects.all()
+
+        location = self.request.GET.get('location')
+        if location:
+            queryset = queryset.filter(location__slug=location)
+
+        after = self.request.GET.get('after')
+        if after:
+            queryset = queryset.filter(timestamp__gt=after)
+
+        before = self.request.GET.get('before')
+        if before:
+            queryset = queryset.filter(timestamp__lt=before)
+
+        return queryset
 
     @list_route(methods=['get'])
     def latest(self, request):
