@@ -6,3 +6,6 @@ verlustdernacht/local.py
 
 static/*
 !static/.gitkeep
+
+env
+env3
