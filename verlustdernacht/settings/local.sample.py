@@ -10,15 +10,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'verlustdernacht',
-        'USER': 'verlustdernacht',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-    },
-    'lightcurve': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lightcurve',
-        'USER': 'lightcurve'
+        'USER': '',
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',
