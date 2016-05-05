@@ -16,11 +16,14 @@ class MeasurementViewSet(ReadOnlyModelViewSet):
     @list_route(methods=['get'])
     def latest(self, request):
 
-        location = request.GET.get('location')
-        if request.GET.get('location'):
-            measurement = Measurement.objects.filter(location__slug=location).latest('timestamp')
-        else:
-            measurement = Measurement.objects.latest('timestamp')
+        try:
+            location = request.GET.get('location')
+            if request.GET.get('location'):
+                measurement = Measurement.objects.filter(location__slug=location).latest('timestamp')
+            else:
+                measurement = Measurement.objects.latest('timestamp')
+        except Measurement.DoesNotExist:
+            return Response('Error: No latest measurement could be found.', status=404)
 
         serializer = self.get_serializer(measurement)
         return Response(serializer.data)
