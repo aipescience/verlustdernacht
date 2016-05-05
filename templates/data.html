@@ -10,8 +10,11 @@
 <div class="row" ng-app="data" ng-controller="DataController">
     <div class="col-md-9">
 
-        <h2>Data for Babelsberg</h2>
-        <div class="box data-plot"></div>
+        <h2>Data for {$ service.location.name $}</h2>
+
+        <div class="canvas" ng-hide="service.dialpad">
+            <svg id="plot" class="box" viewBox="0 0 640 480" preserveAspectRatio="xMidYMid" />
+        </div>
 
     </div>
     <div class="col-md-3">

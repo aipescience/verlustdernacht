@@ -17,21 +17,21 @@ a:hover {
     color: #f2fa61;
     text-decoration: none;
 }
-h2 { 
+h2 {
     font-size: 16px;
     line-height: 20px;
     margin-top: 0;
     margin-bottom: 10px;
     font-weight: bold;
 }
-h3 { 
+h3 {
     font-size: 12px;
     line-height: 20px;
     margin-top: 20px;
     margin-bottom: 5px;
     font-weight: normal;
 }
-h3:first-child { 
+h3:first-child {
     margin-top: 0;
 }
 .container {
@@ -101,12 +101,6 @@ h3:first-child {
 .box {
     border: 1px solid #aaa;
 }
-.home-plot {
-    height: 200px;
-}
-.data-plot {
-    height: 400px;
-}
 .data-form {
     height: 200px;
 }
@@ -130,4 +124,35 @@ h3:first-child {
 }
 .site-form button:last-child {
     float: right;
+}
+
+.axis path {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1;
+}
+.axis line {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1;
+}
+.axis .tick {
+    stroke: none;
+    fill: #ccc;
+    font-size: 11px;
+}
+.axis {
+    shape-rendering: crispEdges;
+}
+
+circle.data {
+    stroke: #ccc;
+    fill: #ccc;
+    r: 1;
+    shape-rendering: crispEdges;
+}
+
+path.data {
+    stroke: #ccc;
+    shape-rendering: crispEdges;
 }

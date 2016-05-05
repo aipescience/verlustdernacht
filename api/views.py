@@ -33,7 +33,7 @@ class MeasurementViewSet(ReadOnlyModelViewSet):
         if before:
             queryset = queryset.filter(timestamp__lt=before)
 
-        return queryset
+        return queryset.order_by('timestamp')
 
     @list_route(methods=['get'])
     def latest(self, request):
