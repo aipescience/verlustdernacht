@@ -25,14 +25,14 @@
             <dt>Location</dt>
             <dd>{$ service.location.name $}</dd>
 
-            <dt>Device</dt>
-            <dd>{$ service.location.device $}</dd>
+            <div ng-show="service.location.device">
+                <dt>Device</dt>
+                <dd>{$ service.location.device $}</dd>
+            </div>
 
-            <dt>Longitude</dt>
-            <dd>{$ service.location.longitude $}</dd>
+            <dt>Location</dt>
+            <dd>{$ service.location.longitude $} N / {$ service.location.latitude $} E</dd>
 
-            <dt>Latitude</dt>
-            <dd>{$ service.location.latitude $}</dd>
         </dl>
 
         <form name="SiteForm" class="site-form">

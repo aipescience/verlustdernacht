@@ -8,7 +8,7 @@ class Location(models.Model):
     name = models.CharField(max_length=256)
     slug = models.SlugField()
     description = models.TextField(blank=True, null=True)
-
+    device = models.CharField(max_length=256, blank=True, null=True)
     latitude = models.FloatField()
     longitude = models.FloatField()
 
