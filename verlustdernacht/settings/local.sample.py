@@ -1,7 +1,5 @@
 DEBUG = True
 
-TEMPLATE_DEBUG = True
-
 ALLOWED_HOSTS = []
 
 SECRET_KEY = 'this is a not very secret key'
