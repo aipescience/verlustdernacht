@@ -1,11 +1,10 @@
-verlustdernacht/local.py
+verlustdernacht/settings/local.py
 
 *~
 *.pyc
 .DS_Store
 
-static/*
-!static/.gitkeep
+static_root
 
 env
 env3
