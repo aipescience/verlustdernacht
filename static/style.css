@@ -154,5 +154,7 @@ circle.data {
 
 path.data {
     stroke: #ccc;
+    fill: none;
     shape-rendering: crispEdges;
+
 }

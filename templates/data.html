@@ -10,7 +10,7 @@
 <div class="row" ng-app="data" ng-controller="DataController">
     <div class="col-md-9">
 
-        <h2>Data for {$ service.location.name $}</h2>
+        <h2>Daten für {$ service.location.name $}</h2>
 
         <div class="canvas" ng-hide="service.dialpad">
             <svg id="plot" class="box" viewBox="0 0 640 480" preserveAspectRatio="xMidYMid" />
@@ -22,7 +22,7 @@
         <h2>Site information</h2>
 
         <dl>
-            <dt>Location</dt>
+            <dt>Ort</dt>
             <dd>{$ service.location.name $}</dd>
 
             <div ng-show="service.location.device">
@@ -30,7 +30,7 @@
                 <dd>{$ service.location.device $}</dd>
             </div>
 
-            <dt>Location</dt>
+            <dt>Position</dt>
             <dd>{$ service.location.longitude $} N / {$ service.location.latitude $} E</dd>
 
         </dl>
@@ -38,7 +38,7 @@
         <form name="SiteForm" class="site-form">
             <div class="form-group">
 
-                <label for="site">Select different site</label>
+                <label for="site">Anderen Ort auswählen</label>
                 <select id="site" class="form-control"
                     ng-model="service.location.slug"
                     ng-options="location.slug as location.name for location in service.locations">
@@ -47,8 +47,21 @@
             </div>
 
             <div class="form-group">
-                <label for="date">Select date</label>
-                <input type="date" id="date" class="form-control" ng-model="service.date"></input>
+
+                <label for="site">Andere Meßgröße auswählen</label>
+                <select id="site" class="form-control"
+                    ng-model="service.quantity"
+                    ng-change="service.drawPlot()"
+                    ng-options="quantity.key as quantity.text for quantity in service.quantities">
+                </select>
+
+            </div>
+
+            <div class="form-group">
+                <label for="date">Anderes Datum auswählen</label>
+                <input type="date" id="date" class="form-control"
+                    ng-model="service.date"
+                    ng-change="service.fetchMeasurements()"></input>
             </div>
 
         </form>
