@@ -42,13 +42,13 @@
         </p>
         <ul>
             <li>
-                <a title="Datenbank" href="/data">Datenbankzugriff</a>
+                <a title="Datenbank" href="{% url 'data' %}">Datenbankzugriff</a>
             </li>
             <li>
-                <a title="Messnetz" href="/sites">Standorte der SQM- und MarkPro-Lichtsensoren</a>
+                <a title="Messnetz" href="{% url 'locations' %}">Standorte der SQM- und MarkPro-Lichtsensoren</a>
             </li>
             <li>
-                <a title="API" href="/api">REST API</a>
+                <a title="API" href="{% url 'api-root' %}">REST API</a>
             </li>
             </ul>
     </div>
