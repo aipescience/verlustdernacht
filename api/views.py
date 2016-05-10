@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 from .models import Location, Measurement
 from .serializers import LocationSerializer, MeasurementSerializer
+from .pagination import MeasurementPagination
 
 
 class LocationViewSet(ReadOnlyModelViewSet):
@@ -16,24 +17,16 @@ class LocationViewSet(ReadOnlyModelViewSet):
 class MeasurementViewSet(ReadOnlyModelViewSet):
 
     serializer_class = MeasurementSerializer
-    pagination_class = PageNumberPagination
+    pagination_class = MeasurementPagination
 
     def get_queryset(self):
-        queryset = Measurement.objects.all()
+        queryset = Measurement.objects.order_by('timestamp')
 
         location = self.request.GET.get('location')
         if location:
             queryset = queryset.filter(location__slug=location)
 
-        after = self.request.GET.get('after')
-        if after:
-            queryset = queryset.filter(timestamp__gt=after)
-
-        before = self.request.GET.get('before')
-        if before:
-            queryset = queryset.filter(timestamp__lt=before)
-
-        return queryset.order_by('timestamp')
+        return queryset
 
     @list_route(methods=['get'])
     def latest(self, request):

@@ -81,12 +81,13 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
             params: {
                 location: service.location.slug,
                 after: sunset,
-                before: sunrise
+                before: sunrise,
+                every: 10
             }
         };
 
         $http.get(urls.measurements, config).success(function(response) {
-            service.measurements = response;
+            service.measurements = response.results;
 
             service.drawPlot();
         });
