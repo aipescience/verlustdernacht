@@ -9,6 +9,8 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
 
 app.factory('DataService', ['$http','$window',function($http,$window) {
 
+    var baseurl = angular.element('meta[name="baseurl"]').attr('content');
+
     var service = {
         'quantities': [
             {
@@ -35,8 +37,8 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
     };
 
     var urls = {
-        'locations': '/api/locations/',
-        'measurements': '/api/measurements/',
+        'locations': baseurl + 'api/locations/',
+        'measurements': baseurl + 'api/measurements/',
     };
 
     function getDate() {

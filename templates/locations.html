@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'data.js' %}" ></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="row" ng-app="data" ng-controller="DataController">
+    <div class="col-md-9">
+
+        <h2>Standorte der Lichtsensoren</h2>
+
+        <p>
+            Noch nicht implementiert
+        </p>
+    </div>
+</div>
+{% endblock %}
