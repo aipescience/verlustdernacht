@@ -33,5 +33,5 @@ class MeasurementPagination(BasePagination):
             ('every', self.every),
             ('before', self.before),
             ('after', self.after),
-            ('results', data)
+            ('measurements', data)
         ]))

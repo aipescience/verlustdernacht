@@ -87,7 +87,8 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
         };
 
         $http.get(urls.measurements, config).success(function(response) {
-            service.measurements = response.results;
+            service.count = response.count;
+            service.measurements = response.measurements;
 
             service.drawPlot();
         });

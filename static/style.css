@@ -127,6 +127,16 @@ h3:first-child {
     padding-right: 15px;
 }
 
+.canvas {
+    position: relative;
+}
+.label-empty {
+    position: absolute;
+    top: 230px;
+    width: 100%;
+    text-align: center;
+}
+
 .axis path {
     fill: none;
     stroke: #ccc;
