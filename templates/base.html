@@ -28,7 +28,7 @@
         <div class="navigation">
             <div class="row">
                 <div class="col-md-4">
-                    <a href="/">Verlust der Nacht - Datenbank AIP</a>
+                    <a href="{% url 'home' %}">Verlust der Nacht - Datenbank AIP</a>
                 </div>
                 <div class="col-md-4">
                     <a href="http://www.verlustdernacht.de">Forschungsverbund - Homepage</a>
@@ -43,10 +43,10 @@
         </div>
         <div class="footer">
             <div class="pull-right">
-                <a href="/impressum">Impressum</a>
+                <a href="{% url 'impressum' %}">Impressum</a>
             </div>
         </div>
-    </div> 
+    </div>
 
     {% if not debug %}
     <!-- Piwik -->
