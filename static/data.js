@@ -92,6 +92,22 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
         });
     };
 
+    service.prev = function() {
+        var date = angular.copy(service.date);
+        date.setDate(date.getDate() - 1);
+
+        service.date = date;
+        service.fetchMeasurements();
+    };
+
+    service.next = function() {
+        var date = angular.copy(service.date);
+        date.setDate(date.getDate() + 1);
+
+        service.date = date;
+        service.fetchMeasurements();
+    };
+
     service.drawPlot = function() {
 
         d3.selectAll("svg > *").remove();

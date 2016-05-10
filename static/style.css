@@ -116,14 +116,15 @@ h3:first-child {
     width: 75%;
     margin-left: 10%;
 }
-.site-form button {
-    width: 80px;
-}
 .site-form button:first-child {
     float: left;
+    padding-left: 15px;
+    padding-right: 20px;
 }
 .site-form button:last-child {
     float: right;
+    padding-left: 20px;
+    padding-right: 15px;
 }
 
 .axis path {
