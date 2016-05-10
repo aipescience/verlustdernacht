@@ -41,13 +41,6 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
         'measurements': baseurl + 'api/measurements/',
     };
 
-    function getDate() {
-        var date = new Date();
-        date.setDate(date.getDate() - 1);
-        date.setHours(18, 0, 0);
-        return date;
-    }
-
     function getMin(data, key) {
         return data.reduce(function(prev, curr) {
             return prev[key] < curr[key] ? prev : curr;
@@ -61,7 +54,11 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
     }
 
     service.init = function() {
-        service.date = getDate();
+        var date = new Date();
+        date.setDate(date.getDate() - 1);
+        date.setHours(12, 0, 0);
+
+        service.date = date;
         service.quantity = 'magnitude';
 
         // fetch locations
@@ -74,15 +71,17 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
     };
 
     service.fetchMeasurements = function() {
-        var before = angular.copy(service.date);
-        before.setDate(before.getDate() + 1);
-        before.setHours(8, 0, 0);
+        var next_day = new Date();
+        next_day.setDate(service.date.getDate() + 1);
+
+        var sunset = SunCalc.getTimes(service.date, service.location.latitude, service.location.longitude).sunsetStart,
+            sunrise = SunCalc.getTimes(next_day, service.location.latitude, service.location.longitude).sunrise;
 
         var config = {
             params: {
                 location: service.location.slug,
-                after: service.date,
-                before: before
+                after: sunset,
+                before: sunrise
             }
         };
 
