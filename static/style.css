@@ -55,8 +55,6 @@ h3:first-child {
 
 .navigation,
 .footer {
-    height: 30px;
-    /*background-image: url('img/header_navigation.jpg');*/
     background-image: linear-gradient(#3e557f 0%, #11113f 100%);
     margin-left: -15px;
     margin-right: -15px;
@@ -70,7 +68,6 @@ h3:first-child {
 .navigation .row div a {
     color: white;
     display: block;
-    height: 30px;
     line-height: 30px;
     text-align: center;
 }
@@ -129,10 +126,11 @@ h3:first-child {
 
 .canvas {
     position: relative;
+    margin-bottom: 20px;
 }
 .label-empty {
     position: absolute;
-    top: 230px;
+    top: 45%;
     width: 100%;
     text-align: center;
 }
@@ -150,7 +148,7 @@ h3:first-child {
 .axis .tick {
     stroke: none;
     fill: #ccc;
-    font-size: 11px;
+    font-size: 8px;
 }
 .axis {
     shape-rendering: crispEdges;
@@ -166,5 +164,6 @@ circle.data {
 path.data {
     stroke: #ccc;
     fill: none;
-    shape-rendering: crispEdges;
+    stroke-width: 1;
+    /*shape-rendering: crispEdges;*/
 }

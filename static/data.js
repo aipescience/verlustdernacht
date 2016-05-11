@@ -11,30 +11,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
 
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
-    var service = {
-        'quantities': [
-            {
-                key: 'magnitude',
-                text: 'Magnitude'
-            },
-            {
-                key: 'frequency',
-                text: 'Frequenz'
-            },
-            {
-                key: 'counts',
-                text: 'Counts'
-            },
-            {
-                key: 'period',
-                text: 'Periode'
-            },
-            {
-                key: 'temperature',
-                text: 'Temperatur'
-            }
-        ]
-    };
+    var service = {};
 
     var urls = {
         'locations': baseurl + 'api/locations/',
@@ -74,14 +51,11 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
         var next_day = new Date();
         next_day.setDate(service.date.getDate() + 1);
 
-        var sunset = SunCalc.getTimes(service.date, service.location.latitude, service.location.longitude).sunsetStart,
-            sunrise = SunCalc.getTimes(next_day, service.location.latitude, service.location.longitude).sunrise;
-
         var config = {
             params: {
                 location: service.location.slug,
-                after: sunset,
-                before: sunrise,
+                after: service.date,
+                before: next_day,
                 every: 10
             }
         };
@@ -119,9 +93,9 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
 
         if (data.length === 0) return;
 
-        var margin = {top: 10, right: 10, bottom: 30, left: 50},
-            width = 640 - margin.left - margin.right,
-            height = 480 - margin.top - margin.bottom;
+        var margin = {top: 10, right: 10, bottom: 20, left: 20},
+            width = 320 - margin.left - margin.right,
+            height = 240 - margin.top - margin.bottom;
 
         var xMin = new Date(getMin(data, 'timestamp')),
             xMax = new Date(getMax(data, 'timestamp')),

@@ -16,11 +16,11 @@
 
     <div class="col-md-9">
 
-        <div class="canvas box" ng-hide="service.dialpad">
+        <div class="canvas box">
             <div class="label-empty" ng-show="service.count == 0">
                 Keine Daten vorhanden
             </div>
-            <svg id="plot" viewBox="0 0 640 480" preserveAspectRatio="xMidYMid" />
+            <svg id="plot" viewBox="0 0 320 240" preserveAspectRatio="xMidYMid" />
         </div>
 
     </div>
@@ -48,17 +48,6 @@
                 <select id="site" class="form-control"
                     ng-model="service.location.slug"
                     ng-options="location.slug as location.name for location in service.locations">
-                </select>
-
-            </div>
-
-            <div class="form-group">
-
-                <label for="site">Andere Meßgröße auswählen</label>
-                <select id="site" class="form-control"
-                    ng-model="service.quantity"
-                    ng-change="service.drawPlot()"
-                    ng-options="quantity.key as quantity.text for quantity in service.quantities">
                 </select>
 
             </div>
