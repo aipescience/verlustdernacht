@@ -1,3 +1,5 @@
+import dateutil.parser
+
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
@@ -15,8 +17,16 @@ class LocationViewSet(ReadOnlyModelViewSet):
 
 
 class NightViewSet(ReadOnlyModelViewSet):
-    queryset = Night.objects.all()
     serializer_class = NightSerializer
+
+    def get_queryset(self):
+        queryset = Night.objects.all()
+
+        date = self.request.GET.get('date')
+        if date:
+            queryset = queryset.filter(date=dateutil.parser.parse(date).date())
+
+        return queryset
 
     @list_route(methods=['get'])
     def latest(self, request):

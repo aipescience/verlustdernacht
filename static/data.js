@@ -15,6 +15,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
 
     var urls = {
         'locations': baseurl + 'api/locations/',
+        'nights': baseurl + 'api/nights/',
         'measurements': baseurl + 'api/measurements/',
     };
 
@@ -31,31 +32,53 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
     }
 
     service.init = function() {
-        var date = new Date();
-        date.setDate(date.getDate() - 1);
-        date.setHours(12, 0, 0);
-
-        service.date = date;
-        service.quantity = 'magnitude';
-
         // fetch locations
         $http.get(urls.locations).success(function(response) {
             service.locations = response;
             service.location = service.locations[0];
 
-            service.fetchMeasurements();
+            // fetch last night
+            $http.get(urls.nights + 'latest/').success(function(response) {
+                service.night = response;
+                service.date = new Date(response.date);
+
+                service.fetchMeasurements();
+            });
+        });
+    };
+
+    service.fetchNight = function() {
+        var config = {
+            params: {
+                date: service.date
+            }
+        };
+
+        $http.get(urls.nights, config).success(function(response) {
+            if (response.length) {
+                service.night = response[0];
+
+                service.fetchMeasurements();
+            } else {
+                service.count = 0;
+                service.measurements = [];
+
+                service.drawPlot();
+            }
         });
     };
 
     service.fetchMeasurements = function() {
-        var next_day = new Date();
-        next_day.setDate(service.date.getDate() + 1);
+        var after = new Date(service.night.date);
+        after.setHours(12);
+        var before = new Date(after);
+        before.setDate(before.getDate() + 1);
 
         var config = {
             params: {
                 location: service.location.slug,
-                after: service.date,
-                before: next_day,
+                after: after,
+                before: before,
                 every: 10
             }
         };
@@ -73,7 +96,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
         date.setDate(date.getDate() - 1);
 
         service.date = date;
-        service.fetchMeasurements();
+        service.fetchNight();
     };
 
     service.next = function() {
@@ -81,7 +104,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
         date.setDate(date.getDate() + 1);
 
         service.date = date;
-        service.fetchMeasurements();
+        service.fetchNight();
     };
 
     service.drawPlot = function() {
@@ -89,7 +112,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
         d3.selectAll("svg > *").remove();
 
         var data = service.measurements,
-            key = service.quantity;
+            key = 'magnitude';
 
         if (data.length === 0) return;
 

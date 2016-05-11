@@ -19,3 +19,4 @@ class MeasurementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Measurement
+        fields = ('id', 'timestamp', 'magnitude')
