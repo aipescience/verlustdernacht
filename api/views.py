@@ -4,14 +4,34 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
-from .models import Location, Measurement
-from .serializers import LocationSerializer, MeasurementSerializer
+from .models import Location, Night, Measurement
+from .serializers import LocationSerializer, NightSerializer, MeasurementSerializer
 from .pagination import MeasurementPagination
 
 
 class LocationViewSet(ReadOnlyModelViewSet):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
+
+
+class NightViewSet(ReadOnlyModelViewSet):
+    queryset = Night.objects.all()
+    serializer_class = NightSerializer
+
+    @list_route(methods=['get'])
+    def latest(self, request):
+
+        try:
+            location = request.GET.get('location')
+            if request.GET.get('location'):
+                night = Night.objects.filter(location__slug=location).latest('date')
+            else:
+                night = Night.objects.latest('date')
+        except Night.DoesNotExist:
+            return Response('Error: No latest night could be found.', status=404)
+
+        serializer = self.get_serializer(night)
+        return Response(serializer.data)
 
 
 class MeasurementViewSet(ReadOnlyModelViewSet):

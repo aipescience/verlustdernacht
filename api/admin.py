@@ -1,14 +1,8 @@
 from django.contrib import admin
 
-from .models import Location, Measurement
+from .models import Location, Night, Measurement
 
 
-class LocationAdmin(admin.ModelAdmin):
-    pass
-
-
-class MeasurementAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(Location, LocationAdmin)
-admin.site.register(Measurement, MeasurementAdmin)
+admin.site.register(Location)
+admin.site.register(Night)
+admin.site.register(Measurement)

@@ -1,6 +1,6 @@
-from __future__ import unicode_literals
-
 from django.db import models
+
+from .utils import get_solar_values
 
 
 class Location(models.Model):
@@ -14,6 +14,27 @@ class Location(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Night(models.Model):
+
+    date = models.DateField()
+    location = models.ForeignKey(Location)
+
+    sunset = models.DateTimeField()
+    sunrise = models.DateTimeField()
+    nadir = models.DateTimeField()
+
+    civil_dusk = models.DateTimeField()
+    civil_dawn = models.DateTimeField()
+    nautical_dusk = models.DateTimeField()
+    nautical_dawn = models.DateTimeField()
+    astronomical_dusk = models.DateTimeField()
+    astronomical_dawn = models.DateTimeField()
+    nadir = models.DateTimeField()
+
+    def __str__(self):
+        return str(self.location) + ' ' + str(self.date)
 
 
 class Measurement(models.Model):
