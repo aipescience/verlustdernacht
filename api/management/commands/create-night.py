@@ -25,24 +25,20 @@ class Command(BaseCommand):
 
         location = Location.objects.get(slug=options['location'])
 
-        this_date = Time(date)
-        next_date = Time(date + timedelta(1))
+        astro_date = Time(date)
 
         observer = Observer(longitude=location.longitude, latitude=location.latitude, timezone='UTC')
 
         night = Night(date=date, location=location)
 
-        night.sunset = observer.sun_set_time(this_date).to_datetime(timezone=utc)
-        night.sunrise = observer.sun_rise_time(next_date).to_datetime(timezone=utc)
-        night.nadir = observer.midnight(this_date).to_datetime(timezone=utc)
-
-        night.civil_dusk = observer.twilight_evening_civil(this_date).to_datetime(timezone=utc)
-        night.civil_dawn = observer.twilight_morning_civil(next_date).to_datetime(timezone=utc)
-
-        night.nautical_dusk = observer.twilight_evening_nautical(this_date).to_datetime(timezone=utc)
-        night.nautical_dawn = observer.twilight_morning_nautical(next_date).to_datetime(timezone=utc)
-
-        night.astronomical_dusk = observer.twilight_evening_astronomical(this_date).to_datetime(timezone=utc)
-        night.astronomical_dawn = observer.twilight_morning_astronomical(next_date).to_datetime(timezone=utc)
+        night.sunset = observer.sun_set_time(astro_date, which='next').to_datetime(timezone=utc)
+        night.civil_dusk = observer.twilight_evening_civil(astro_date, which='next').to_datetime(timezone=utc)
+        night.nautical_dusk = observer.twilight_evening_nautical(astro_date, which='next').to_datetime(timezone=utc)
+        #night.astronomical_dusk = observer.twilight_evening_astronomical(astro_date, which='next').to_datetime(timezone=utc)
+        night.nadir = observer.midnight(astro_date, which='next').to_datetime(timezone=utc)
+        #night.astronomical_dawn = observer.twilight_morning_astronomical(astro_date, which='next').to_datetime(timezone=utc)
+        night.nautical_dawn = observer.twilight_morning_nautical(astro_date, which='next').to_datetime(timezone=utc)
+        night.civil_dawn = observer.twilight_morning_civil(astro_date, which='next').to_datetime(timezone=utc)
+        night.sunrise = observer.sun_rise_time(astro_date, which='next').to_datetime(timezone=utc)
 
         night.save()

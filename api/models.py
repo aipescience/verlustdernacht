@@ -25,13 +25,12 @@ class Night(models.Model):
     sunrise = models.DateTimeField()
     nadir = models.DateTimeField()
 
-    civil_dusk = models.DateTimeField()
-    civil_dawn = models.DateTimeField()
-    nautical_dusk = models.DateTimeField()
-    nautical_dawn = models.DateTimeField()
-    astronomical_dusk = models.DateTimeField()
-    astronomical_dawn = models.DateTimeField()
-    nadir = models.DateTimeField()
+    civil_dusk = models.DateTimeField(null=True, blank=True)
+    civil_dawn = models.DateTimeField(null=True, blank=True)
+    nautical_dusk = models.DateTimeField(null=True, blank=True)
+    nautical_dawn = models.DateTimeField(null=True, blank=True)
+    astronomical_dusk = models.DateTimeField(null=True, blank=True)
+    astronomical_dawn = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return str(self.location) + ' ' + str(self.date)

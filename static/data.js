@@ -37,11 +37,21 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
             service.locations = response;
             service.location = service.locations[0];
 
+            service.axes = {
+                xmin: new Date('2000-01-01'),
+                xmax: new Date('2000-01-01'),
+                ymin: 22,
+                ymax: 5
+            };
+            service.axes.xmin.setHours(20);
+            service.axes.xmax.setDate(service.axes.xmax.getDate() + 1);
+            service.axes.xmax.setHours(7);
+
             // fetch last night
             $http.get(urls.nights + 'latest/').success(function(response) {
                 service.night = response;
-                service.date = new Date(response.date);
 
+                service.setDate(response.date);
                 service.fetchMeasurements();
             });
         });
@@ -58,6 +68,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
             if (response.length) {
                 service.night = response[0];
 
+                service.setDate(service.night.date);
                 service.fetchMeasurements();
             } else {
                 service.count = 0;
@@ -107,9 +118,22 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
         service.fetchNight();
     };
 
-    service.drawPlot = function() {
+    service.setDate = function(date) {
+        service.date = new Date(date);
 
-        console.log(service.night);
+        var xmin = new Date(date);
+        xmin.setHours(service.axes.xmin.getHours());
+        xmin.setMinutes(service.axes.xmin.getMinutes());
+        service.axes.xmin = xmin;
+
+        var xmax = new Date(date);
+        xmax.setDate(xmax.getDate() + 1);
+        xmax.setHours(service.axes.xmax.getHours());
+        xmax.setMinutes(service.axes.xmax.getMinutes());
+        service.axes.xmax = xmax;
+    };
+
+    service.drawPlot = function() {
 
         d3.selectAll("svg > *").remove();
 
@@ -118,17 +142,16 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
 
         if (data.length === 0) return;
 
-        var margin = {top: 10, right: 10, bottom: 20, left: 20},
+        var margin = {top: 10, right: 20, bottom: 40, left: 60},
             width = 688.5 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
 
-        var xMin = new Date(getMin(data, 'timestamp')),
-            xMax = new Date(getMax(data, 'timestamp')),
-            yMin = Math.ceil(getMax(data, key)),
-            yMax = getMin(data, key);
-
-        var xScale = d3.time.scale.utc().domain([xMin, xMax]).range([0, width]),
-            yScale = d3.scale.linear().domain([yMin, yMax]).range([height, 0]);
+        var xScale = d3.time.scale.utc()
+                        .domain([service.axes.xmin, service.axes.xmax])
+                        .range([0, width]),
+            yScale = d3.scale.linear()
+                        .domain([service.axes.ymin, service.axes.ymax])
+                        .range([height, 0]);
 
         var xTicks = d3.time.hours,
             xTickFormat = d3.time.format('%H:00');
@@ -146,22 +169,61 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
                         .append("g")
                         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+        var x = {};
+        angular.forEach(['sunset', 'sunrise', 'civil_dusk', 'civil_dawn', 'nautical_dusk', 'nautical_dawn', 'astronomical_dusk', 'astronomical_dawn', 'nadir'], function (key) {
+            if (service.night[key] !== null) {
+                x[key] = xScale(new Date(service.night[key]));
+            }
+        });
+
+        if (angular.isDefined(x.sunset) && angular.isDefined(x.sunrise)) {
+        svg.append('g').append('rect')
+            .attr("x", x.sunset)
+            .attr("y", 0)
+            .attr("width", x.sunrise - x.sunset)
+            .attr("height", height)
+            .attr('class', 'civil-twilight');
+        }
+        if (angular.isDefined(x.civil_dusk) && angular.isDefined(x.civil_dawn)) {
+        svg.append('g').append('rect')
+            .attr("x", x.civil_dusk)
+            .attr("y", 0)
+            .attr("width", x.civil_dawn - x.civil_dusk)
+            .attr("height", height)
+            .attr('class', 'nautical-twilight');
+        }
+        if (angular.isDefined(x.nautical_dusk) && angular.isDefined(x.nautical_dawn)) {
+            svg.append('g').append('rect')
+                .attr("x", x.nautical_dusk)
+                .attr("y", 0)
+                .attr("width", x.nautical_dawn - x.nautical_dusk)
+                .attr("height", height)
+                .attr('class', 'astronomical-twilight');
+        }
+        if (angular.isDefined(x.astronomical_dusk) && angular.isDefined(x.astronomical_dawn)) {
+        svg.append('g').append('rect')
+            .attr("x", x.astronomical_dusk)
+            .attr("y", 0)
+            .attr("width", x.astronomical_dawn - x.astronomical_dusk)
+            .attr("height", height)
+            .attr('class', 'night');
+        }
         svg.append('g').call(xAxis)
             .attr('class', 'axis')
             .attr('transform', 'translate(0,' + height + ')');
         svg.append('g').call(yAxis)
             .attr('class', 'axis')
             .attr('transform', 'translate(0, 0)');
-
-        angular.forEach(['sunset', 'sunrise', 'civil_dusk', 'civil_dawn', 'nautical_dusk', 'nautical_dawn', 'astronomical_dusk', 'astronomical_dawn', 'nadir'], function (key) {
-            var x = xScale(new Date(service.night[key]));
-            svg.append('line')
-                .attr("x1", x)
-                .attr("y1", 0)
-                .attr("x2", x)
-                .attr("y2", height)
-                .attr('class', key);
-        });
+        svg.append('g').append("text")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate(-40,"+(height/2)+")rotate(-90)")
+            .attr('class', 'axis')
+            .text("Helligkeit in Mag");
+        svg.append('g').append("text")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate("+ (width/2) +"," + (height+40) + ")")
+            .attr('class', 'axis')
+            .text("Uhrzeit");
 
         var line = d3.svg.line()
             .x(function (d) { return xScale(new Date(d.timestamp)); })

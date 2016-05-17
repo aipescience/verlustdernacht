@@ -1,31 +1,24 @@
 .axis path {
     fill: none;
-    stroke: #ccc;
+    stroke: #333;
     stroke-width: 1;
 }
 .axis line {
     fill: none;
-    stroke: #ccc;
+    stroke: #333;
     stroke-width: 1;
 }
 .axis .tick {
     stroke: none;
-    fill: #ccc;
-    font-size: 8px;
+    fill: #333;
+    font-size: 14px;
 }
 .axis {
     shape-rendering: crispEdges;
 }
 
-circle.data {
-    stroke: #ccc;
-    fill: #ccc;
-    r: 1;
-    shape-rendering: crispEdges;
-}
-
 path.data {
-    stroke: #ccc;
+    stroke: #101020;
     fill: none;
     stroke-width: 2;
     /*shape-rendering: crispEdges;*/
@@ -55,4 +48,24 @@ line.astronomical_dawn {
 }
 line.nadir {
     stroke: #333;
+}
+
+rect.civil-twilight,
+rect.nautical-twilight,
+rect.astronomical-twilight,
+rect.night  {
+    stroke: none;
+    fill: black;
+}
+rect.civil-twilight {
+    fill: #bbb;
+}
+rect.nautical-twilight {
+    fill: #aaa;
+}
+rect.astronomical-twilight {
+    fill: #999;
+}
+rect.night {
+    fill: #888;
 }

@@ -127,6 +127,8 @@ h3:first-child {
 .canvas {
     position: relative;
     margin-bottom: 20px;
+    background-color: #ccc;
+    color: #333;
 }
 .label-empty {
     position: absolute;
