@@ -1,0 +1,58 @@
+.axis path {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1;
+}
+.axis line {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1;
+}
+.axis .tick {
+    stroke: none;
+    fill: #ccc;
+    font-size: 8px;
+}
+.axis {
+    shape-rendering: crispEdges;
+}
+
+circle.data {
+    stroke: #ccc;
+    fill: #ccc;
+    r: 1;
+    shape-rendering: crispEdges;
+}
+
+path.data {
+    stroke: #ccc;
+    fill: none;
+    stroke-width: 2;
+    /*shape-rendering: crispEdges;*/
+}
+
+line {
+    fill: none;
+    stroke-width: 1;
+}
+
+line.sunrise,
+line.sunset {
+    stroke: yellow;
+}
+
+line.civil_dusk,
+line.civil_dawn {
+    stroke: #888;
+}
+line.nautical_dusk,
+line.nautical_dawn {
+    stroke: #777;
+}
+line.astronomical_dusk,
+line.astronomical_dawn {
+    stroke: #666;
+}
+line.nadir {
+    stroke: #333;
+}
