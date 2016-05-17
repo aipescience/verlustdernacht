@@ -109,6 +109,8 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
 
     service.drawPlot = function() {
 
+        console.log(service.night);
+
         d3.selectAll("svg > *").remove();
 
         var data = service.measurements,
@@ -117,8 +119,8 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
         if (data.length === 0) return;
 
         var margin = {top: 10, right: 10, bottom: 20, left: 20},
-            width = 320 - margin.left - margin.right,
-            height = 240 - margin.top - margin.bottom;
+            width = 688.5 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
 
         var xMin = new Date(getMin(data, 'timestamp')),
             xMax = new Date(getMax(data, 'timestamp')),
@@ -150,6 +152,16 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
         svg.append('g').call(yAxis)
             .attr('class', 'axis')
             .attr('transform', 'translate(0, 0)');
+
+        angular.forEach(['sunset', 'sunrise', 'civil_dusk', 'civil_dawn', 'nautical_dusk', 'nautical_dawn', 'astronomical_dusk', 'astronomical_dawn', 'nadir'], function (key) {
+            var x = xScale(new Date(service.night[key]));
+            svg.append('line')
+                .attr("x1", x)
+                .attr("y1", 0)
+                .attr("x2", x)
+                .attr("y2", height)
+                .attr('class', key);
+        });
 
         var line = d3.svg.line()
             .x(function (d) { return xScale(new Date(d.timestamp)); })

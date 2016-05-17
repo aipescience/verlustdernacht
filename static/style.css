@@ -134,36 +134,3 @@ h3:first-child {
     width: 100%;
     text-align: center;
 }
-
-.axis path {
-    fill: none;
-    stroke: #ccc;
-    stroke-width: 1;
-}
-.axis line {
-    fill: none;
-    stroke: #ccc;
-    stroke-width: 1;
-}
-.axis .tick {
-    stroke: none;
-    fill: #ccc;
-    font-size: 8px;
-}
-.axis {
-    shape-rendering: crispEdges;
-}
-
-circle.data {
-    stroke: #ccc;
-    fill: #ccc;
-    r: 1;
-    shape-rendering: crispEdges;
-}
-
-path.data {
-    stroke: #ccc;
-    fill: none;
-    stroke-width: 1;
-    /*shape-rendering: crispEdges;*/
-}
