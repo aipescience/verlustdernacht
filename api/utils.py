@@ -16,42 +16,47 @@ def create_night(location_string, date_string):
     else:
         date = datetime.utcnow().replace(hour=12, minute=0, second=0, microsecond=0)
 
-    time = Time(date)
-    time_delta = TimeDelta(600.0, format='sec')
+    try:
+        Night.objects.filter(location=location).get(date=date)
+        print 'Night is already in the database.'
+    except Night.DoesNotExist:
 
-    observer = Observer(longitude=location.longitude, latitude=location.latitude, timezone='UTC')
+        time = Time(date)
+        time_delta = TimeDelta(600.0, format='sec')
 
-    times = {
-        'sunset': observer.sun_set_time(time, which='next'),
-        'civil_dusk': observer.twilight_evening_civil(time, which='next'),
-        'nautical_dusk': observer.twilight_evening_nautical(time, which='next'),
-        'astronomical_dusk': observer.twilight_evening_astronomical(time, which='next'),
-        'midnight': observer.midnight(time, which='next'),
-        'astronomical_dawn': observer.twilight_morning_astronomical(time, which='next'),
-        'nautical_dawn': observer.twilight_morning_nautical(time, which='next'),
-        'civil_dawn': observer.twilight_morning_civil(time, which='next'),
-        'sunrise': observer.sun_rise_time(time, which='next'),
-    }
+        observer = Observer(longitude=location.longitude, latitude=location.latitude, timezone='UTC')
 
-    night = Night(date=date, location=location)
-    night.mjd = int(time.mjd) + 1
-    night.moon_phase = observer.moon_phase(observer.midnight(time, which='next')).value
-    for key in times:
-        if times[key].jd > 0:
-            setattr(night, key, times[key].to_datetime(timezone=utc))
-    night.save()
+        times = {
+            'sunset': observer.sun_set_time(time, which='next'),
+            'civil_dusk': observer.twilight_evening_civil(time, which='next'),
+            'nautical_dusk': observer.twilight_evening_nautical(time, which='next'),
+            'astronomical_dusk': observer.twilight_evening_astronomical(time, which='next'),
+            'midnight': observer.midnight(time, which='next'),
+            'astronomical_dawn': observer.twilight_morning_astronomical(time, which='next'),
+            'nautical_dawn': observer.twilight_morning_nautical(time, which='next'),
+            'civil_dawn': observer.twilight_morning_civil(time, which='next'),
+            'sunrise': observer.sun_rise_time(time, which='next'),
+        }
 
-    moon_positions = []
-    for i in xrange(144):
-        moon_altitude = observer.moon_altaz(time).alt.degree
+        night = Night(date=date, location=location)
+        night.mjd = int(time.mjd) + 1
+        night.moon_phase = observer.moon_phase(observer.midnight(time, which='next')).value
+        for key in times:
+            if times[key].jd > 0:
+                setattr(night, key, times[key].to_datetime(timezone=utc))
+        night.save()
 
-        moon_position = MoonPosition(
-            timestamp=time.to_datetime(timezone=utc),
-            altitude=moon_altitude,
-            location=location
-        )
+        moon_positions = []
+        for i in xrange(144):
+            moon_altitude = observer.moon_altaz(time).alt.degree
 
-        moon_positions.append(moon_position)
-        time += time_delta
+            moon_position = MoonPosition(
+                timestamp=time.to_datetime(timezone=utc),
+                altitude=moon_altitude,
+                location=location
+            )
 
-    MoonPosition.objects.bulk_create(moon_positions)
+            moon_positions.append(moon_position)
+            time += time_delta
+
+        MoonPosition.objects.bulk_create(moon_positions)
