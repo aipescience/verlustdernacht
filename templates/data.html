@@ -20,7 +20,7 @@
             <div class="label-empty" ng-show="service.count == 0">
                 Keine Daten vorhanden
             </div>
-            <svg id="plot" viewBox="0 0 688.5 500" preserveAspectRatio="xMidYMid" />
+            <svg id="plot" viewBox="0 0 688.5 688.5" preserveAspectRatio="xMidYMid" />
         </div>
 
     </div>
@@ -84,12 +84,14 @@
                 </div>
             </div>
         </form>
+
+
     </div>
 
     <div class="col-md-6">
         <h2>Daten zur Nacht</h2>
 
-        <table class="table table-bordered">
+        <table class="data-table table table-bordered">
             <tr>
                 <td>Sonnenuntergang</td>
                 <td>{$ service.night.sunset | date: 'shortTime' $}</td>
@@ -110,6 +112,10 @@
                 <td ng-hide="service.night.astronomical_dusk">-</td>
             </td>
             <tr>
+                <td>astronomische Mitternacht</td>
+                <td>{$ service.night.midnight | date: 'shortTime' $}</td>
+            </td>
+            <tr>
                 <td>astronomische Morgendämmerung</td>
                 <td ng-show="service.night.astronomical_dawn">
                     ab {$ service.night.astronomical_dawn | date: 'shortTime' $}</td>
@@ -127,12 +133,18 @@
                 <td>Sonnenaufgang</td>
                 <td>{$ service.night.sunrise | date: 'shortTime' $}</td>
             </td>
+            <tr>
+                <td>Mondphase</td>
+                <td>
+                    <img ng-src="{$ service.moon_url $}">
+                </td>
+            </tr>
         </table>
     </div>
 
     <div class="col-md-6">
         <h2>Daten zum Ort</h2>
-        <table class="table table-bordered">
+        <table class="data-table table table-bordered">
             <tr>
                 <td>Ort</td>
                 <td>{$ service.location.name $}</td>

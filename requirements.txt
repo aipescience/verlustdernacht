@@ -5,3 +5,4 @@ astropy
 astroplan
 pytz
 python-dateutil
+PyEphem

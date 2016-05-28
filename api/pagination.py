@@ -7,10 +7,14 @@ from rest_framework.response import Response
 from rest_framework.pagination import BasePagination
 
 
-class MeasurementPagination(BasePagination):
+class AbstractPagination(BasePagination):
     display_page_controls = False
 
     def paginate_queryset(self, queryset, request, view=None):
+
+        location = request.GET.get('location')
+        if location:
+            queryset = queryset.filter(location__slug=location)
 
         self.before = request.GET.get('before')
         if self.before:
@@ -27,6 +31,9 @@ class MeasurementPagination(BasePagination):
 
         return list(queryset)
 
+
+class MeasurementPagination(AbstractPagination):
+
     def get_paginated_response(self, data):
         return Response(OrderedDict([
             ('count', len(data)),
@@ -34,4 +41,16 @@ class MeasurementPagination(BasePagination):
             ('before', self.before),
             ('after', self.after),
             ('measurements', data)
+        ]))
+
+
+class MoonPositionPagination(AbstractPagination):
+
+    def get_paginated_response(self, data):
+        return Response(OrderedDict([
+            ('count', len(data)),
+            ('every', self.every),
+            ('before', self.before),
+            ('after', self.after),
+            ('moonpositions', data)
         ]))

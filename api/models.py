@@ -1,7 +1,5 @@
 from django.db import models
 
-from .utils import get_solar_values
-
 
 class Location(models.Model):
 
@@ -19,11 +17,14 @@ class Location(models.Model):
 class Night(models.Model):
 
     date = models.DateField()
+    mjd = models.IntegerField()
     location = models.ForeignKey(Location)
 
-    sunset = models.DateTimeField()
-    sunrise = models.DateTimeField()
-    nadir = models.DateTimeField()
+    moon_phase = models.FloatField(null=True, blank=True)
+
+    sunset = models.DateTimeField(null=True, blank=True)
+    sunrise = models.DateTimeField(null=True, blank=True)
+    midnight = models.DateTimeField(null=True, blank=True)
 
     civil_dusk = models.DateTimeField(null=True, blank=True)
     civil_dawn = models.DateTimeField(null=True, blank=True)
@@ -44,6 +45,16 @@ class Measurement(models.Model):
     counts = models.IntegerField()
     period = models.FloatField()
     temperature = models.FloatField()
+    location = models.ForeignKey(Location)
+
+    def __str__(self):
+        return self.timestamp.isoformat()
+
+
+class MoonPosition(models.Model):
+
+    timestamp = models.DateTimeField()
+    altitude = models.FloatField()
     location = models.ForeignKey(Location)
 
     def __str__(self):

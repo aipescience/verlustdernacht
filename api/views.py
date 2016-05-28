@@ -1,14 +1,13 @@
 import dateutil.parser
 
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
-from .models import Location, Night, Measurement
-from .serializers import LocationSerializer, NightSerializer, MeasurementSerializer
-from .pagination import MeasurementPagination
+from .models import *
+from .serializers import *
+from .pagination import *
 
 
 class LocationViewSet(ReadOnlyModelViewSet):
@@ -45,18 +44,9 @@ class NightViewSet(ReadOnlyModelViewSet):
 
 
 class MeasurementViewSet(ReadOnlyModelViewSet):
-
+    queryset = Measurement.objects.all()
     serializer_class = MeasurementSerializer
     pagination_class = MeasurementPagination
-
-    def get_queryset(self):
-        queryset = Measurement.objects.order_by('timestamp')
-
-        location = self.request.GET.get('location')
-        if location:
-            queryset = queryset.filter(location__slug=location)
-
-        return queryset
 
     @list_route(methods=['get'])
     def latest(self, request):
@@ -100,3 +90,9 @@ class MeasurementViewSet(ReadOnlyModelViewSet):
             return Response('Ok')
         else:
             return Response(status=500)
+
+
+class MoonPositionViewSet(ReadOnlyModelViewSet):
+    queryset = MoonPosition.objects.all()
+    serializer_class = MoonPositionSerializer
+    pagination_class = MoonPositionPagination

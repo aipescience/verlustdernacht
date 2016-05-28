@@ -136,3 +136,10 @@ h3:first-child {
     width: 100%;
     text-align: center;
 }
+
+.data-table td:first-child {
+    width: 60%;
+}
+.data-table td:last-child {
+    width: 40%;
+}
