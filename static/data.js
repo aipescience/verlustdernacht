@@ -34,7 +34,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
     }
 
     function getMoonUrl(moon_phase) {
-        var moon_string = Math.floor((moon_phase / (2 * Math.PI) * 30) - 1).toString();
+        var moon_string = Math.floor(moon_phase * 30).toString();
         return staticurl + 'img/moon/moon' + moon_string + '_sm.png';
     }
 
@@ -82,6 +82,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
                 service.setDate(service.night.date);
                 service.fetchMeasurements();
             } else {
+                service.night = false;
                 service.count = 0;
                 service.measurements = [];
 

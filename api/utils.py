@@ -1,5 +1,7 @@
+import math
 from datetime import datetime
 
+import ephem
 from pytz import utc
 from astropy.time import Time, TimeDelta
 from astroplan import Observer
@@ -22,9 +24,26 @@ def create_night(location_string, date_string):
     except Night.DoesNotExist:
 
         time = Time(date)
-        time_delta = TimeDelta(600.0, format='sec')
+        time_delta = TimeDelta(60000.0, format='sec')
 
-        observer = Observer(longitude=location.longitude, latitude=location.latitude, timezone='UTC')
+        # guess if the moon is waxing or waning
+        if ephem.next_full_moon(date) - ephem.Date(date) < ephem.Date(date) - ephem.previous_full_moon(date):
+            waxing_moon = True
+        else:
+            waxing_moon = False
+
+        observer = Observer(
+            longitude=location.longitude,
+            latitude=location.latitude,
+            timezone='UTC'
+        )
+
+        moon_phase = observer.moon_phase(time).value
+
+        if waxing_moon:
+            moon_phase = (math.pi - moon_phase) / (2 * math.pi)
+        else:
+            moon_phase = (math.pi + moon_phase) / (2 * math.pi)
 
         times = {
             'sunset': observer.sun_set_time(time, which='next'),
@@ -40,23 +59,23 @@ def create_night(location_string, date_string):
 
         night = Night(date=date, location=location)
         night.mjd = int(time.mjd) + 1
-        night.moon_phase = observer.moon_phase(observer.midnight(time, which='next')).value
+        night.moon_phase = moon_phase
         for key in times:
             if times[key].jd > 0:
                 setattr(night, key, times[key].to_datetime(timezone=utc))
         night.save()
 
-        moon_positions = []
-        for i in xrange(144):
-            moon_altitude = observer.moon_altaz(time).alt.degree
+        # moon_positions = []
+        # for i in xrange(144):
+        #     moon_altitude = observer.moon_altaz(time).alt.degree
 
-            moon_position = MoonPosition(
-                timestamp=time.to_datetime(timezone=utc),
-                altitude=moon_altitude,
-                location=location
-            )
+        #     moon_position = MoonPosition(
+        #         timestamp=time.to_datetime(timezone=utc),
+        #         altitude=moon_altitude,
+        #         location=location
+        #     )
 
-            moon_positions.append(moon_position)
-            time += time_delta
+        #     moon_positions.append(moon_position)
+        #     time += time_delta
 
-        MoonPosition.objects.bulk_create(moon_positions)
+        # MoonPosition.objects.bulk_create(moon_positions)
