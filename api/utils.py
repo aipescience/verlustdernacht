@@ -65,17 +65,17 @@ def create_night(location_string, date_string):
                 setattr(night, key, times[key].to_datetime(timezone=utc))
         night.save()
 
-        # moon_positions = []
-        # for i in xrange(144):
-        #     moon_altitude = observer.moon_altaz(time).alt.degree
+        moon_positions = []
+        for i in xrange(144):
+            moon_altitude = observer.moon_altaz(time).alt.degree
 
-        #     moon_position = MoonPosition(
-        #         timestamp=time.to_datetime(timezone=utc),
-        #         altitude=moon_altitude,
-        #         location=location
-        #     )
+            moon_position = MoonPosition(
+                timestamp=time.to_datetime(timezone=utc),
+                altitude=moon_altitude,
+                location=location
+            )
 
-        #     moon_positions.append(moon_position)
-        #     time += time_delta
+            moon_positions.append(moon_position)
+            time += time_delta
 
-        # MoonPosition.objects.bulk_create(moon_positions)
+        MoonPosition.objects.bulk_create(moon_positions)
