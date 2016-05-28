@@ -1,53 +1,32 @@
+.axis {
+    shape-rendering: crispEdges;
+    fill: #ccc;
+}
 .axis path {
     fill: none;
-    stroke: #333;
+    stroke: #ccc;
     stroke-width: 1;
 }
 .axis line {
     fill: none;
-    stroke: #333;
+    stroke: #ccc;
     stroke-width: 1;
 }
 .axis .tick {
     stroke: none;
-    fill: #333;
+    fill: #ccc;
     font-size: 14px;
-}
-.axis {
-    shape-rendering: crispEdges;
 }
 
 path.data {
-    stroke: #101020;
+    stroke: #fff;
     fill: none;
     stroke-width: 2;
-    /*shape-rendering: crispEdges;*/
 }
 
-line {
+line.data {
     fill: none;
     stroke-width: 1;
-}
-
-line.sunrise,
-line.sunset {
-    stroke: yellow;
-}
-
-line.civil_dusk,
-line.civil_dawn {
-    stroke: #888;
-}
-line.nautical_dusk,
-line.nautical_dawn {
-    stroke: #777;
-}
-line.astronomical_dusk,
-line.astronomical_dawn {
-    stroke: #666;
-}
-line.nadir {
-    stroke: #333;
 }
 
 rect.civil-twilight,
@@ -55,17 +34,6 @@ rect.nautical-twilight,
 rect.astronomical-twilight,
 rect.night  {
     stroke: none;
-    fill: black;
-}
-rect.civil-twilight {
-    fill: #bbb;
-}
-rect.nautical-twilight {
-    fill: #aaa;
-}
-rect.astronomical-twilight {
-    fill: #999;
-}
-rect.night {
-    fill: #888;
+    fill: white;
+    opacity: 0.1;
 }

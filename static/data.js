@@ -269,7 +269,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
             .attr("text-anchor", "middle")
             .attr("transform", "translate(" + (width/2) +"," + (height+40) + ")")
             .attr('class', 'axis')
-            .text("Uhrzeit");
+            .text("Zeit t");
         svg.append('g').append("text")
             .attr("text-anchor", "middle")
             .attr("transform", "translate(" + (width/2) +",-30)")
@@ -281,7 +281,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
             .attr("text-anchor", "middle")
             .attr("transform", "translate(-40," + ((height - separator)/2) + ")rotate(-90)")
             .attr('class', 'axis')
-            .text("Helligkeit des Himmels in Mag");
+            .text("Helligkeit m [Mag]");
         svg.append('g').append("text")
             .attr("text-anchor", "middle")
             .attr("transform", "translate(-40," + ((height - separator) + (separator)/2) + ")rotate(-90)")

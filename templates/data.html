@@ -11,13 +11,13 @@
 <div class="row" ng-app="data" ng-controller="DataController">
 
     <div class="col-md-12">
-        <h2>Daten für {$ service.location.name $}</h2>
+        <h2>Daten für {$ service.location.name $} am {$ service.date | date: 'fullDate' $}</h2>
     </div>
 
     <div class="col-md-9">
 
-        <div class="canvas box">
-            <div class="label-empty" ng-show="service.count == 0">
+        <div class="plot-canvas box">
+            <div class="plot-label-empty" ng-show="service.count == 0">
                 Keine Daten vorhanden
             </div>
             <svg id="plot" viewBox="0 0 688.5 688.5" preserveAspectRatio="xMidYMid" />
@@ -25,34 +25,41 @@
 
     </div>
 
-    <div class="col-md-3">
+    <div class="sidebar col-md-3">
+        <h2>Mondphase</h2>
+
+        <div class="moon-canvas">
+            <img ng-src="{$ service.moon_url $}">
+        </div>
+
+        <h2>Ort auswählen</h2>
         <div class="form-group">
-            <label for="site">Anderen Ort auswählen</label>
             <select id="site" class="form-control"
                 ng-model="service.location.slug"
                 ng-options="location.slug as location.name for location in service.locations">
             </select>
         </div>
 
+        <h2>Datum auswählen</h2>
         <div class="form-group">
-            <label for="date">Anderes Datum auswählen</label>
             <input type="date" id="date" class="form-control"
                 ng-model="service.date"
                 ng-change="service.fetchNight()"></input>
         </div>
-
         <div class="form-group">
             <button class="btn btn-default" ng-click="service.prev()">
                 <span class="glyphicon glyphicon-backward"></span>
             </button>
-            <button class="btn btn-default" ng-click="service.next()">
+            <button class="btn btn-default pull-right" ng-click="service.next()">
                 <span class="glyphicon glyphicon-forward"></span>
             </button>
         </div>
 
+        <h2>Ausschnitt auswählen</h2>
+
         <form class="form-horizontal">
             <div class="form-group">
-                <label for="time" class="control-label col-xs-4">xmin</label>
+                <label for="time" class="control-label col-xs-4">t<sub>min</sub></label>
                 <div class="col-xs-8">
                     <input type="time" id="xmin" class="form-control"
                         ng-model="service.axes.xmin"
@@ -60,7 +67,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="time" class="control-label col-xs-4">xmax</label>
+                <label for="time" class="control-label col-xs-4">t<sub>max</sub></label>
                 <div class="col-xs-8">
                     <input type="time" id="xmax" class="form-control"
                         ng-model="service.axes.xmax"
@@ -68,7 +75,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="time" class="control-label col-xs-4">ymin</label>
+                <label for="time" class="control-label col-xs-4">m<sub>min</sub></label>
                 <div class="col-xs-8">
                     <input type="number" step="0.5" id="ymin" class="form-control"
                         ng-model="service.axes.ymin"
@@ -76,7 +83,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="time" class="control-label col-xs-4">ymax</label>
+                <label for="time" class="control-label col-xs-4">m<sub>max</sub></label>
                 <div class="col-xs-8">
                     <input type="number" step="0.5" id="ymax" class="form-control"
                         ng-model="service.axes.ymax"
@@ -84,8 +91,6 @@
                 </div>
             </div>
         </form>
-
-
     </div>
 
     <div class="col-md-6">
@@ -135,9 +140,7 @@
             </td>
             <tr>
                 <td>Mondphase</td>
-                <td>
-                    <img ng-src="{$ service.moon_url $}">
-                </td>
+                <td>{$ service.night.moon_phase | number: 2 $} rad</td>
             </tr>
         </table>
     </div>
@@ -157,11 +160,11 @@
                 <td>Position</td>
                 <td>{$ service.location.longitude $} N / {$ service.location.latitude $} E</td>
             </td>
-            <tr>
-                <td>Beschreibung</td>
-                <td>{$ service.location.description $}</td>
-            </td>
         </table>
+
+        <div>
+            {$ service.location.description $}
+        </div>
     </div>
 </div>
 {% endblock %}
