@@ -24,7 +24,7 @@ def create_night(location_string, date_string):
     except Night.DoesNotExist:
 
         time = Time(date)
-        time_delta = TimeDelta(60000.0, format='sec')
+        time_delta = TimeDelta(600.0, format='sec')
 
         # guess if the moon is waxing or waning
         if ephem.next_full_moon(date) - ephem.Date(date) < ephem.Date(date) - ephem.previous_full_moon(date):
