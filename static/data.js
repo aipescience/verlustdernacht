@@ -50,7 +50,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
                 ymin: 22,
                 ymax: 5,
                 y2min: 0,
-                y2max: 40
+                y2max: 49
             };
             service.axes.xmin.setHours(20);
             service.axes.xmax.setDate(service.axes.xmax.getDate() + 1);
@@ -186,7 +186,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
                         .tickFormat(xTickFormat),
             x2Axis = d3.svg.axis().scale(x2Scale),
             yAxis = d3.svg.axis().scale(yScale),
-            y2Axis = d3.svg.axis().scale(y2Scale);
+            y2Axis = d3.svg.axis().ticks(5).scale(y2Scale);
 
         var x = {};
         angular.forEach(['sunset', 'sunrise', 'civil_dusk', 'civil_dawn', 'nautical_dusk', 'nautical_dawn', 'astronomical_dusk', 'astronomical_dawn', 'nadir'], function (key) {
