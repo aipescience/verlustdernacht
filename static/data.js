@@ -50,7 +50,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
                 ymin: 22,
                 ymax: 5,
                 y2min: 0,
-                y2max: 29
+                y2max: 40
             };
             service.axes.xmin.setHours(20);
             service.axes.xmax.setDate(service.axes.xmax.getDate() + 1);
