@@ -16,7 +16,7 @@ class Location(models.Model):
 
 class Night(models.Model):
 
-    date = models.DateField()
+    date = models.DateField(db_index=True)
     mjd = models.IntegerField(null=True, blank=True)
     location = models.ForeignKey(Location)
 
@@ -39,7 +39,7 @@ class Night(models.Model):
 
 class Measurement(models.Model):
 
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(db_index=True)
     magnitude = models.FloatField()
     frequency = models.IntegerField(null=True, blank=True)
     counts = models.IntegerField(null=True, blank=True)
@@ -53,7 +53,7 @@ class Measurement(models.Model):
 
 class MoonPosition(models.Model):
 
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(db_index=True)
     altitude = models.FloatField()
     location = models.ForeignKey(Location)
 
