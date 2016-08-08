@@ -17,7 +17,7 @@ class Location(models.Model):
 class Night(models.Model):
 
     date = models.DateField()
-    mjd = models.IntegerField()
+    mjd = models.IntegerField(null=True, blank=True)
     location = models.ForeignKey(Location)
 
     moon_phase = models.FloatField(null=True, blank=True)
@@ -41,10 +41,10 @@ class Measurement(models.Model):
 
     timestamp = models.DateTimeField()
     magnitude = models.FloatField()
-    frequency = models.IntegerField()
-    counts = models.IntegerField()
-    period = models.FloatField()
-    temperature = models.FloatField()
+    frequency = models.IntegerField(null=True, blank=True)
+    counts = models.IntegerField(null=True, blank=True)
+    period = models.FloatField(null=True, blank=True)
+    temperature = models.FloatField(null=True, blank=True)
     location = models.ForeignKey(Location)
 
     def __str__(self):
