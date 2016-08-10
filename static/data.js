@@ -1,24 +1,29 @@
-app = angular.module('data',[]);
+app = angular.module('data',['ngResource']);
 
-app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider) {
+app.config(['$httpProvider', '$interpolateProvider', '$locationProvider', '$resourceProvider', function($httpProvider, $interpolateProvider, $locationProvider, $resourceProvider) {
     $interpolateProvider.startSymbol('{$');
     $interpolateProvider.endSymbol('$}');
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+    $locationProvider.html5Mode(true);
+    $resourceProvider.defaults.stripTrailingSlashes = false;
+    $resourceProvider.defaults.actions.paginate = {
+        method: 'GET',
+        isArray: false
+    };
 }]);
 
-app.factory('DataService', ['$http','$window',function($http,$window) {
+app.factory('DataService', ['$resource', '$q', '$window', '$location', function($resource, $q, $window, $location) {
 
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
     var staticurl = angular.element('meta[name="staticurl"]').attr('content');
 
-    var service = {};
+    var resources = {
+        locations: $resource(baseurl + 'api/locations/:id/'),
+        nights: $resource(baseurl + 'api/nights/:list_route/:id/'),
+        measurements: $resource(baseurl + 'api/measurements/:id/'),
+        moonpositions: $resource(baseurl + 'api/moonpositions/:id/'),
 
-    var urls = {
-        'locations': baseurl + 'api/locations/',
-        'nights': baseurl + 'api/nights/',
-        'measurements': baseurl + 'api/measurements/',
-        'moonpositions': baseurl + 'api/moonpositions/'
     };
 
     function getMin(data, key) {
@@ -38,9 +43,11 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
         return staticurl + 'img/moon/moon' + moon_string + '_sm.png';
     }
 
+    var service = {};
+
     service.init = function() {
         // fetch locations
-        $http.get(urls.locations).success(function(response) {
+        resources.locations.query(function(response) {
             service.locations = response;
             service.location = service.locations[0];
 
@@ -50,45 +57,53 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
                 ymin: 22,
                 ymax: 5,
                 y2min: 0,
-                y2max: 49
+                y2max: 70
             };
-            service.axes.xmin.setHours(20);
+            service.axes.xmin.setHours(15);
             service.axes.xmax.setDate(service.axes.xmax.getDate() + 1);
-            service.axes.xmax.setHours(7);
+            service.axes.xmax.setHours(9);
 
-            // fetch last night
-            $http.get(urls.nights + 'latest/').success(function(response) {
-                service.night = response;
-                service.moon_url = getMoonUrl(service.night.moon_phase);
+            // get the current date form the url
+            var date_string = $location.path().replace(/\//g,'');
+            var date = new Date(date_string);
 
-                service.setDate(response.date);
-                service.fetchMeasurements();
-            });
+            if (isNaN(date) === false) {
+                service.date = date;
+            } else {
+                service.date = null;
+            }
+
+            service.fetchNight();
         });
     };
 
     service.fetchNight = function() {
-        var config = {
-            params: {
-                date: service.date
-            }
-        };
+        if (angular.isDefined(service.date) && service.date) {
+            resources.nights.query({date: service.date}, function(response) {
+                if (response.length) {
+                    service.night = response[0];
 
-        $http.get(urls.nights, config).success(function(response) {
-            if (response.length) {
+                    service.moon_url = getMoonUrl(service.night.moon_phase);
+                    service.setDate(service.night.date);
+                    service.fetchMeasurements();
+                } else {
+                    service.night = false;
+                    $location.path('/');
+
+                    service.measurements = [];
+                    service.drawPlot();
+                }
+            });
+        } else {
+            // fetch last night
+            resources.nights.query({list_route: 'latest'}, function(response) {
                 service.night = response[0];
-                service.moon_url = getMoonUrl(service.night.moon_phase);
 
+                service.moon_url = getMoonUrl(service.night.moon_phase);
                 service.setDate(service.night.date);
                 service.fetchMeasurements();
-            } else {
-                service.night = false;
-                service.count = 0;
-                service.measurements = [];
-
-                service.drawPlot();
-            }
-        });
+            });
+        }
     };
 
     service.fetchMeasurements = function() {
@@ -98,23 +113,23 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
         before.setDate(before.getDate() + 1);
 
         var config = {
-            params: {
-                location: service.location.slug,
-                after: after,
-                before: before,
-                every: 10
-            }
+            location: service.location.slug,
+            after: after,
+            before: before,
+            every: 10
         };
 
-        $http.get(urls.measurements, config).success(function(response) {
-            service.count = response.count;
+        var p1 = resources.measurements.paginate(config, function(response) {
             service.measurements = response.measurements;
+        }).$promise;
 
-            config.params.every = 1;
-            $http.get(urls.moonpositions, config).success(function(response) {
-                service.moonpositions = response.moonpositions;
-                service.drawPlot();
-            });
+        config.every = 1;
+        var p2 = resources.moonpositions.paginate(config, function(response) {
+            service.moonpositions = response.moonpositions;
+        }).$promise;
+
+        $q.all([p1, p2]).then(function() {
+            service.drawPlot();
         });
     };
 
@@ -136,6 +151,8 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
 
     service.setDate = function(date) {
         service.date = new Date(date);
+
+        $location.path('/' + date);
 
         var xmin = new Date(date);
         xmin.setHours(service.axes.xmin.getHours());
@@ -178,19 +195,14 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
                         .domain([service.axes.y2min, service.axes.y2max])
                         .range([height, height - separator]);
 
-        var xTicks = d3.time.hours,
-            xTickFormat = d3.time.format('%H:00');
-
-        var xAxis = d3.svg.axis().scale(xScale)
-                        .ticks(xTicks)
-                        .tickFormat(xTickFormat),
+        var xAxis = d3.svg.axis().scale(xScale).ticks(6).tickFormat(d3.time.format('%H:00')),
             x2Axis = d3.svg.axis().scale(x2Scale),
             yAxis = d3.svg.axis().scale(yScale),
-            y2Axis = d3.svg.axis().ticks(5).scale(y2Scale);
+            y2Axis = d3.svg.axis().ticks(4).scale(y2Scale);
 
         var x = {};
         angular.forEach(['sunset', 'sunrise', 'civil_dusk', 'civil_dawn', 'nautical_dusk', 'nautical_dawn', 'astronomical_dusk', 'astronomical_dawn', 'nadir'], function (key) {
-            if (service.night[key] !== null) {
+            if (angular.isDefined(service.night[key]) && service.night[key] !== null ) {
                 x[key] = xScale(new Date(service.night[key]));
             }
         });
@@ -214,6 +226,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
             .attr("y", 0)
             .attr("width", x.sunrise - x.sunset)
             .attr("height", height)
+            .attr('clip-path', "url(#clip)")
             .attr('class', 'civil-twilight');
         }
         if (angular.isDefined(x.civil_dusk) && angular.isDefined(x.civil_dawn)) {
@@ -222,6 +235,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
             .attr("y", 0)
             .attr("width", x.civil_dawn - x.civil_dusk)
             .attr("height", height)
+            .attr('clip-path', "url(#clip)")
             .attr('class', 'nautical-twilight');
         }
         if (angular.isDefined(x.nautical_dusk) && angular.isDefined(x.nautical_dawn)) {
@@ -230,6 +244,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
                 .attr("y", 0)
                 .attr("width", x.nautical_dawn - x.nautical_dusk)
                 .attr("height", height)
+                .attr('clip-path', "url(#clip)")
                 .attr('class', 'astronomical-twilight');
         }
         if (angular.isDefined(x.astronomical_dusk) && angular.isDefined(x.astronomical_dawn)) {
@@ -238,6 +253,7 @@ app.factory('DataService', ['$http','$window',function($http,$window) {
                 .attr("y", 0)
                 .attr("width", x.astronomical_dawn - x.astronomical_dusk)
                 .attr("height", height)
+                .attr('clip-path', "url(#clip)")
                 .attr('class', 'night');
         }
 
