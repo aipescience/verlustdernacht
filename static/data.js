@@ -207,21 +207,25 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
             }
         });
 
-        d3.selectAll("svg > *").remove();
-
-        var svg = d3.select('#plot')
+        var plot = d3.select('#plot')
             .append("g")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        svg.append('clipPath').attr('id', 'clip')
+        var clip = plot.append('defs').append('clipPath')
+            .attr('id', 'clip')
             .append('rect')
             .attr('x', '0')
             .attr('y', '0')
             .attr('width', width)
             .attr('height', height);
 
+        var area = plot.append('g')
+            .attr('clip-path', "url(#clip)");
+
         if (angular.isDefined(x.sunset) && angular.isDefined(x.sunrise)) {
-        svg.append('g').append('rect')
+        area.append('g').append('rect')
             .attr("x", x.sunset)
             .attr("y", 0)
             .attr("width", x.sunrise - x.sunset)
@@ -230,7 +234,7 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
             .attr('class', 'civil-twilight');
         }
         if (angular.isDefined(x.civil_dusk) && angular.isDefined(x.civil_dawn)) {
-        svg.append('g').append('rect')
+        area.append('g').append('rect')
             .attr("x", x.civil_dusk)
             .attr("y", 0)
             .attr("width", x.civil_dawn - x.civil_dusk)
@@ -239,7 +243,7 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
             .attr('class', 'nautical-twilight');
         }
         if (angular.isDefined(x.nautical_dusk) && angular.isDefined(x.nautical_dawn)) {
-            svg.append('g').append('rect')
+            area.append('g').append('rect')
                 .attr("x", x.nautical_dusk)
                 .attr("y", 0)
                 .attr("width", x.nautical_dawn - x.nautical_dusk)
@@ -248,7 +252,7 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
                 .attr('class', 'astronomical-twilight');
         }
         if (angular.isDefined(x.astronomical_dusk) && angular.isDefined(x.astronomical_dawn)) {
-            svg.append('g').append('rect')
+            area.append('g').append('rect')
                 .attr("x", x.astronomical_dusk)
                 .attr("y", 0)
                 .attr("width", x.astronomical_dawn - x.astronomical_dusk)
@@ -257,49 +261,49 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
                 .attr('class', 'night');
         }
 
-        svg.append('g').call(xAxis.orient('bottom'))
+        plot.append('g').call(xAxis.orient('bottom'))
             .attr('class', 'axis')
             .attr('transform', 'translate(0,' + height + ')');
-        svg.append('g').call(xAxis.orient('bottom').tickFormat(''))
+        plot.append('g').call(xAxis.orient('bottom').tickFormat(''))
             .attr('class', 'axis')
             .attr('transform', 'translate(0,' + (height - separator) + ')');
-        svg.append('g').call(x2Axis.orient('top'))
+        plot.append('g').call(x2Axis.orient('top'))
             .attr('class', 'axis')
             .attr('transform', 'translate(0,0)');
 
-        svg.append('g').call(yAxis.orient('left'))
+        plot.append('g').call(yAxis.orient('left'))
             .attr('class', 'axis')
             .attr('transform', 'translate(0, 0)');
-        svg.append('g').call(yAxis.orient('right').tickFormat(''))
+        plot.append('g').call(yAxis.orient('right').tickFormat(''))
             .attr('class', 'axis')
             .attr('transform', 'translate(' + width + ', 0)');
 
-        svg.append('g').call(y2Axis.orient('left'))
+        plot.append('g').call(y2Axis.orient('left'))
             .attr('class', 'axis')
             .attr('transform', 'translate(0, 0)');
-        svg.append('g').call(y2Axis.orient('right').tickFormat(''))
+        plot.append('g').call(y2Axis.orient('right').tickFormat(''))
             .attr('class', 'axis')
             .attr('transform', 'translate(' + width + ', 0)');
 
         // x labels
-        svg.append('g').append("text")
+        plot.append('g').append("text")
             .attr("text-anchor", "middle")
             .attr("transform", "translate(" + (width/2) +"," + (height+40) + ")")
             .attr('class', 'axis')
             .text("Zeit t");
-        svg.append('g').append("text")
+        plot.append('g').append("text")
             .attr("text-anchor", "middle")
             .attr("transform", "translate(" + (width/2) +",-30)")
             .attr('class', 'axis')
             .text('MJD (' + service.night.mjd + ')');
 
         // y labels
-        svg.append('g').append("text")
+        plot.append('g').append("text")
             .attr("text-anchor", "middle")
             .attr("transform", "translate(-40," + ((height - separator)/2) + ")rotate(-90)")
             .attr('class', 'axis')
             .text("Helligkeit m [Mag]");
-        svg.append('g').append("text")
+        plot.append('g').append("text")
             .attr("text-anchor", "middle")
             .attr("transform", "translate(-40," + ((height - separator) + (separator)/2) + ")rotate(-90)")
             .attr('class', 'axis')
@@ -315,12 +319,11 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
             .y(function (d) { return y2Scale(d['altitude']); })
             .interpolate('basis');
 
-        svg.append('g').append("path")
+        area.append('g').append("path")
             .attr("d", line(service.measurements))
-            .attr('clip-path', "url(#clip)")
             .attr('class', 'data');
 
-        svg.append('g').append("path")
+        area.append('g').append("path")
             .attr("d", line2(service.moonpositions))
             .attr('clip-path', "url(#clip)")
             .attr('class', 'data');
