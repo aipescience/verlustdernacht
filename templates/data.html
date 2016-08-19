@@ -10,160 +10,169 @@
 
 <div class="row" ng-app="data" ng-controller="DataController">
 
-    <div class="col-md-12">
-        <h2>Daten für {$ service.location.name $} am {$ service.date | date: 'fullDate' $}</h2>
+    <div ng-hide="service.location">
+        <div class="col-md-12">
+            Keine Standorte konfiguriert.
+        </div>
     </div>
 
-    <div class="col-md-9">
+    <div ng-show="service.location">
 
-        <div class="plot-canvas box">
-            <div class="plot-label-empty" ng-show="service.count == 0">
-                Keine Daten vorhanden
-            </div>
-            <svg id="plot" viewBox="0 0 688.5 688.5" preserveAspectRatio="xMidYMid" />
+        <div class="col-md-12">
+            <h2>Daten für {$ service.location.name $} am {$ service.date | date: 'fullDate' $}</h2>
         </div>
 
-    </div>
+        <div class="col-md-9">
 
-    <div class="sidebar col-md-3">
-        <h2>Mondphase</h2>
-
-        <div class="moon-canvas" >
-            <img ng-show="service.night" ng-src="{$ service.moon_url $}">
-        </div>
-
-        <h2>Ort auswählen</h2>
-        <div class="form-group">
-            <select id="site" class="form-control"
-                ng-model="service.location.slug"
-                ng-options="location.slug as location.name for location in service.locations">
-            </select>
-        </div>
-
-        <h2>Datum auswählen</h2>
-        <div class="form-group">
-            <input type="date" id="date" class="form-control"
-                ng-model="service.date"
-                ng-change="service.fetchNight()"></input>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-default" ng-click="service.prev()">
-                <span class="glyphicon glyphicon-backward"></span>
-            </button>
-            <button class="btn btn-default pull-right" ng-click="service.next()">
-                <span class="glyphicon glyphicon-forward"></span>
-            </button>
-        </div>
-
-        <h2>Ausschnitt auswählen</h2>
-
-        <form class="form-horizontal">
-            <div class="form-group">
-                <label for="time" class="control-label col-xs-4">t<sub>min</sub></label>
-                <div class="col-xs-8">
-                    <input type="time" id="xmin" class="form-control"
-                        ng-model="service.axes.xmin"
-                        ng-change="service.drawPlot()"></input>
+            <div class="plot-canvas box">
+                <div class="plot-label-empty" ng-show="service.count == 0">
+                    Keine Daten vorhanden
                 </div>
+                <svg id="plot" viewBox="0 0 688.5 688.5" preserveAspectRatio="xMidYMid" />
+            </div>
+
+        </div>
+
+        <div class="sidebar col-md-3">
+            <h2>Mondphase</h2>
+
+            <div class="moon-canvas" >
+                <img ng-show="service.night" ng-src="{$ service.moon_url $}">
+            </div>
+
+            <h2>Ort auswählen</h2>
+            <div class="form-group">
+                <select id="site" class="form-control"
+                    ng-model="service.location.slug"
+                    ng-options="location.slug as location.name for location in service.locations">
+                </select>
+            </div>
+
+            <h2>Datum auswählen</h2>
+            <div class="form-group">
+                <input type="date" id="date" class="form-control"
+                    ng-model="service.date"
+                    ng-change="service.fetchNight()"></input>
             </div>
             <div class="form-group">
-                <label for="time" class="control-label col-xs-4">t<sub>max</sub></label>
-                <div class="col-xs-8">
-                    <input type="time" id="xmax" class="form-control"
-                        ng-model="service.axes.xmax"
-                        ng-change="service.drawPlot()"></input>
-                </div>
+                <button class="btn btn-default" ng-click="service.prev()">
+                    <span class="glyphicon glyphicon-backward"></span>
+                </button>
+                <button class="btn btn-default pull-right" ng-click="service.next()">
+                    <span class="glyphicon glyphicon-forward"></span>
+                </button>
             </div>
-            <div class="form-group">
-                <label for="time" class="control-label col-xs-4">m<sub>min</sub></label>
-                <div class="col-xs-8">
-                    <input type="number" step="0.5" id="ymin" class="form-control"
-                        ng-model="service.axes.ymin"
-                        ng-change="service.drawPlot()"></input>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="time" class="control-label col-xs-4">m<sub>max</sub></label>
-                <div class="col-xs-8">
-                    <input type="number" step="0.5" id="ymax" class="form-control"
-                        ng-model="service.axes.ymax"
-                        ng-change="service.drawPlot()"></input>
-                </div>
-            </div>
-        </form>
-    </div>
 
-    <div class="col-md-6">
-        <h2>Daten zur Nacht</h2>
+            <h2>Ausschnitt auswählen</h2>
 
-        <table class="data-table table table-bordered" ng-show="service.night">
-            <tr>
-                <td>Sonnenuntergang</td>
-                <td>{$ service.night.sunset | date: 'shortTime' $}</td>
-            </td>
-            <tr>
-                <td>bürgerliche Abenddämmerung</td>
-                <td>bis {$ service.night.civil_dusk | date: 'shortTime' $}</td>
-            </td>
-            <tr>
-                <td>nautische Abenddämmerung</td>
-                <td>bis {$ service.night.nautical_dusk | date: 'shortTime' $}</td>
-            </td>
-            <tr>
-                <td>astronomische Abenddämmerung</td>
-                <td ng-show="service.night.astronomical_dusk">
-                    bis {$ service.night.astronomical_dusk | date: 'shortTime' $}
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="time" class="control-label col-xs-4">t<sub>min</sub></label>
+                    <div class="col-xs-8">
+                        <input type="time" id="xmin" class="form-control"
+                            ng-model="service.axes.xmin"
+                            ng-change="service.drawPlot()"></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="time" class="control-label col-xs-4">t<sub>max</sub></label>
+                    <div class="col-xs-8">
+                        <input type="time" id="xmax" class="form-control"
+                            ng-model="service.axes.xmax"
+                            ng-change="service.drawPlot()"></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="time" class="control-label col-xs-4">m<sub>min</sub></label>
+                    <div class="col-xs-8">
+                        <input type="number" step="0.5" id="ymin" class="form-control"
+                            ng-model="service.axes.ymin"
+                            ng-change="service.drawPlot()"></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="time" class="control-label col-xs-4">m<sub>max</sub></label>
+                    <div class="col-xs-8">
+                        <input type="number" step="0.5" id="ymax" class="form-control"
+                            ng-model="service.axes.ymax"
+                            ng-change="service.drawPlot()"></input>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-6">
+            <h2>Daten zur Nacht</h2>
+
+            <table class="data-table table table-bordered" ng-show="service.night">
+                <tr>
+                    <td>Sonnenuntergang</td>
+                    <td>{$ service.night.sunset | date: 'shortTime' $}</td>
                 </td>
-                <td ng-hide="service.night.astronomical_dusk">-</td>
-            </td>
-            <tr>
-                <td>astronomische Mitternacht</td>
-                <td>{$ service.night.midnight | date: 'shortTime' $}</td>
-            </td>
-            <tr>
-                <td>astronomische Morgendämmerung</td>
-                <td ng-show="service.night.astronomical_dawn">
-                    ab {$ service.night.astronomical_dawn | date: 'shortTime' $}</td>
-                <td ng-hide="service.night.astronomical_dawn">-</td>
-            </td>
-            <tr>
-                <td>nautische Morgendämmerung</td>
-                <td>ab {$ service.night.nautical_dawn | date: 'shortTime' $}</td>
-            </td>
-            <tr>
-                <td>bürgerliche Morgendämmerung</td>
-                <td>ab {$ service.night.civil_dawn | date: 'shortTime' $}</td>
-            </td>
-            <tr>
-                <td>Sonnenaufgang</td>
-                <td>{$ service.night.sunrise | date: 'shortTime' $}</td>
-            </td>
-            <tr>
-                <td>Mondphase</td>
-                <td>{$ service.night.moon_phase | number: 2 $}</td>
-            </tr>
-        </table>
-    </div>
+                <tr>
+                    <td>bürgerliche Abenddämmerung</td>
+                    <td>bis {$ service.night.civil_dusk | date: 'shortTime' $}</td>
+                </td>
+                <tr>
+                    <td>nautische Abenddämmerung</td>
+                    <td>bis {$ service.night.nautical_dusk | date: 'shortTime' $}</td>
+                </td>
+                <tr>
+                    <td>astronomische Abenddämmerung</td>
+                    <td ng-show="service.night.astronomical_dusk">
+                        bis {$ service.night.astronomical_dusk | date: 'shortTime' $}
+                    </td>
+                    <td ng-hide="service.night.astronomical_dusk">-</td>
+                </td>
+                <tr>
+                    <td>astronomische Mitternacht</td>
+                    <td>{$ service.night.midnight | date: 'shortTime' $}</td>
+                </td>
+                <tr>
+                    <td>astronomische Morgendämmerung</td>
+                    <td ng-show="service.night.astronomical_dawn">
+                        ab {$ service.night.astronomical_dawn | date: 'shortTime' $}</td>
+                    <td ng-hide="service.night.astronomical_dawn">-</td>
+                </td>
+                <tr>
+                    <td>nautische Morgendämmerung</td>
+                    <td>ab {$ service.night.nautical_dawn | date: 'shortTime' $}</td>
+                </td>
+                <tr>
+                    <td>bürgerliche Morgendämmerung</td>
+                    <td>ab {$ service.night.civil_dawn | date: 'shortTime' $}</td>
+                </td>
+                <tr>
+                    <td>Sonnenaufgang</td>
+                    <td>{$ service.night.sunrise | date: 'shortTime' $}</td>
+                </td>
+                <tr>
+                    <td>Mondphase</td>
+                    <td>{$ service.night.moon_phase | number: 2 $}</td>
+                </tr>
+            </table>
+        </div>
 
-    <div class="col-md-6">
-        <h2>Daten zum Ort</h2>
-        <table class="data-table table table-bordered">
-            <tr>
-                <td>Ort</td>
-                <td>{$ service.location.name $}</td>
-            </td>
-            <tr>
-                <td>Device</td>
-                <td>{$ service.location.device $}</td>
-            </td>
-            <tr>
-                <td>Position</td>
-                <td>{$ service.location.longitude $} N / {$ service.location.latitude $} E</td>
-            </td>
-        </table>
+        <div class="col-md-6">
+            <h2>Daten zum Ort</h2>
+            <table class="data-table table table-bordered">
+                <tr>
+                    <td>Ort</td>
+                    <td>{$ service.location.name $}</td>
+                </td>
+                <tr>
+                    <td>Device</td>
+                    <td>{$ service.location.device $}</td>
+                </td>
+                <tr>
+                    <td>Position</td>
+                    <td>{$ service.location.longitude $} N / {$ service.location.latitude $} E</td>
+                </td>
+            </table>
 
-        <div>
-            {$ service.location.description $}
+            <div>
+                {$ service.location.description $}
+            </div>
         </div>
     </div>
 </div>

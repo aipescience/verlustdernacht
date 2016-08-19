@@ -2,6 +2,7 @@ body {
     color: #fff;
     background-color: #555555;
     background-image: url('img/background_555555.jpg');
+    background-repeat: repeat-x;
     height: 100%;
 }
 p {
@@ -35,10 +36,12 @@ h3:first-child {
     margin-top: 0;
 }
 .container {
-    margin-top: 20px;
-    margin-bottom: 60px;
-    border: 1px solid #aaa;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
     background-color: #101020;
+
+    margin-bottom: -1px;
 }
 
 /* header */
@@ -71,7 +74,7 @@ h3:first-child {
     line-height: 30px;
     text-align: center;
 }
-.footer div.pull-right a {
+.footer a {
     color: white;
     display: block;
     height: 30px;
