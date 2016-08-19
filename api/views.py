@@ -40,7 +40,7 @@ class NightViewSet(ReadOnlyModelViewSet):
             return Response('Error: No latest night could be found.', status=404)
 
         serializer = self.get_serializer(night)
-        return Response(serializer.data)
+        return Response([serializer.data])
 
 
 class MeasurementViewSet(ReadOnlyModelViewSet):
