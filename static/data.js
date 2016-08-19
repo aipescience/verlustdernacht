@@ -49,47 +49,51 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
         // fetch locations
         resources.locations.query(function(response) {
             service.locations = response;
-            service.location = service.locations[0];
 
-            service.axes = {
-                xmin: new Date('2000-01-01'),
-                xmax: new Date('2000-01-01'),
-                ymin: 22,
-                ymax: 5,
-                y2min: 0,
-                y2max: 70
-            };
-            service.axes.xmin.setHours(15);
-            service.axes.xmax.setDate(service.axes.xmax.getDate() + 1);
-            service.axes.xmax.setHours(9);
+            if (service.locations.length) {
+                service.location = service.locations[0];
 
-            // get the current date form the url
-            var date_string = $location.path().replace(/\//g,'');
-            var date = new Date(date_string);
+                service.axes = {
+                    xmin: new Date('2000-01-01'),
+                    xmax: new Date('2000-01-01'),
+                    ymin: 22,
+                    ymax: 5,
+                    y2min: 0,
+                    y2max: 70
+                };
+                service.axes.xmin.setHours(15);
+                service.axes.xmax.setDate(service.axes.xmax.getDate() + 1);
+                service.axes.xmax.setHours(9);
 
-            if (isNaN(date) === false) {
-                service.date = date;
+                // get the current date form the url
+                var date_string = $location.path().replace(/\//g,'');
+                var date = new Date(date_string);
+
+                if (isNaN(date) === false) {
+                    service.date = date;
+                } else {
+                    service.date = null;
+                }
+
+                service.fetchNight();
             } else {
-                service.date = null;
+                service.location = false;
             }
-
-            service.fetchNight();
         });
     };
 
     service.fetchNight = function() {
         if (angular.isDefined(service.date) && service.date) {
+            service.updateDate();
+
             resources.nights.query({date: service.date}, function(response) {
                 if (response.length) {
                     service.night = response[0];
-
                     service.moon_url = getMoonUrl(service.night.moon_phase);
-                    service.setDate(service.night.date);
                     service.fetchMeasurements();
                 } else {
                     service.night = false;
-                    $location.path('/');
-
+                    service.moon_url = false;
                     service.measurements = [];
                     service.drawPlot();
                 }
@@ -98,10 +102,14 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
             // fetch last night
             resources.nights.query({list_route: 'latest'}, function(response) {
                 service.night = response[0];
+                service.date = new Date(service.night.date);
 
                 service.moon_url = getMoonUrl(service.night.moon_phase);
-                service.setDate(service.night.date);
+                service.updateDate();
                 service.fetchMeasurements();
+            }, function() {
+                service.night = false;
+                service.date = false;
             });
         }
     };
@@ -149,17 +157,15 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
         service.fetchNight();
     };
 
-    service.setDate = function(date) {
-        service.date = new Date(date);
+    service.updateDate = function() {
+        $location.path('/' + moment(service.date).format('YYYY-MM-DD'));
 
-        $location.path('/' + date);
-
-        var xmin = new Date(date);
+        var xmin = new Date(service.date);
         xmin.setHours(service.axes.xmin.getHours());
         xmin.setMinutes(service.axes.xmin.getMinutes());
         service.axes.xmin = xmin;
 
-        var xmax = new Date(date);
+        var xmax = new Date(service.date);
         xmax.setDate(xmax.getDate() + 1);
         xmax.setHours(service.axes.xmax.getHours());
         xmax.setMinutes(service.axes.xmax.getMinutes());

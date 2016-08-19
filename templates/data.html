@@ -2,7 +2,6 @@
 {% load staticfiles %}
 
 {% block head %}
-    <script type="text/javascript" src="{% static 'lib/suncalc/suncalc.js' %}" ></script>
     <script type="text/javascript" src="{% static 'data.js' %}" ></script>
 {% endblock %}
 
@@ -10,13 +9,19 @@
 
 <div class="row" ng-app="data" ng-controller="DataController">
 
-    <div ng-hide="service.location">
+    <div ng-show="service.location === false">
         <div class="col-md-12">
             Keine Standorte konfiguriert.
         </div>
     </div>
 
-    <div ng-show="service.location">
+    <div ng-show="service.date === false">
+        <div class="col-md-12">
+            Keine Nacht konfiguriert.
+        </div>
+    </div>
+
+    <div ng-show="service.location && service.date">
 
         <div class="col-md-12">
             <h2>Daten für {$ service.location.name $} am {$ service.date | date: 'fullDate' $}</h2>
@@ -101,7 +106,7 @@
             </form>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6" ng-show="service.night">
             <h2>Daten zur Nacht</h2>
 
             <table class="data-table table table-bordered" ng-show="service.night">
@@ -153,7 +158,7 @@
             </table>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6" ng-show="service.night">
             <h2>Daten zum Ort</h2>
             <table class="data-table table table-bordered">
                 <tr>

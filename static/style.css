@@ -145,8 +145,9 @@ h3:first-child {
 
 .moon-canvas {
     text-align: center;
-    padding-top: 10px;
+    margin-top: 10px;
     margin-bottom: 20px;
+    height: 78px;
 }
 
 
