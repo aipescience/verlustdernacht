@@ -222,7 +222,7 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
             .attr('height', height);
 
         var area = plot.append('g')
-            .attr('clip-path', "url(#clip)");
+            .attr('clip-path', 'url(' + $window.location.href + '#clip)');
 
         if (angular.isDefined(x.sunset) && angular.isDefined(x.sunrise)) {
         area.append('g').append('rect')
@@ -230,7 +230,6 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
             .attr("y", 0)
             .attr("width", x.sunrise - x.sunset)
             .attr("height", height)
-            .attr('clip-path', "url(#clip)")
             .attr('class', 'civil-twilight');
         }
         if (angular.isDefined(x.civil_dusk) && angular.isDefined(x.civil_dawn)) {
@@ -239,7 +238,6 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
             .attr("y", 0)
             .attr("width", x.civil_dawn - x.civil_dusk)
             .attr("height", height)
-            .attr('clip-path', "url(#clip)")
             .attr('class', 'nautical-twilight');
         }
         if (angular.isDefined(x.nautical_dusk) && angular.isDefined(x.nautical_dawn)) {
@@ -248,7 +246,6 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
                 .attr("y", 0)
                 .attr("width", x.nautical_dawn - x.nautical_dusk)
                 .attr("height", height)
-                .attr('clip-path', "url(#clip)")
                 .attr('class', 'astronomical-twilight');
         }
         if (angular.isDefined(x.astronomical_dusk) && angular.isDefined(x.astronomical_dawn)) {
@@ -257,7 +254,6 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
                 .attr("y", 0)
                 .attr("width", x.astronomical_dawn - x.astronomical_dusk)
                 .attr("height", height)
-                .attr('clip-path', "url(#clip)")
                 .attr('class', 'night');
         }
 
@@ -325,7 +321,6 @@ app.factory('DataService', ['$resource', '$q', '$window', '$location', function(
 
         area.append('g').append("path")
             .attr("d", line2(service.moonpositions))
-            .attr('clip-path', "url(#clip)")
             .attr('class', 'data');
     };
 
