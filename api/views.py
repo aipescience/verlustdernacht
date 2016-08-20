@@ -17,6 +17,7 @@ class LocationViewSet(ReadOnlyModelViewSet):
 
 class NightViewSet(ReadOnlyModelViewSet):
     serializer_class = NightSerializer
+    pagination_class = NightPagination
 
     def get_queryset(self):
         queryset = Night.objects.all()

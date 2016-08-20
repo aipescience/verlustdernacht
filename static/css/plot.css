@@ -37,3 +37,21 @@ rect.night  {
     fill: white;
     opacity: 0.1;
 }
+
+.month .night {
+    shape-rendering: crispEdges;
+}
+.month .night rect {
+    fill: transparent;
+    stroke: #ccc;
+    stroke-width: 1;
+}
+.month .night text {
+    stroke: none;
+    fill: #ccc;
+    font-size: 12px;
+}
+.month .night .data {
+    fill: none;
+    stroke-width: 1;
+}

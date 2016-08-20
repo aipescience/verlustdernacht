@@ -1,7 +1,7 @@
 body {
     color: #fff;
     background-color: #555555;
-    background-image: url('img/background_555555.jpg');
+    background-image: url('../img/background_555555.jpg');
     background-repeat: repeat-x;
     height: 100%;
 }
@@ -48,7 +48,7 @@ h3:first-child {
 
 .header .banner {
     height: 128px;
-    background-image: url('img/header_banner.jpg');
+    background-image: url('../img/header_banner.jpg');
     margin-left: -15px;
     margin-right: -15px;
     border-bottom: 1px solid #aaa;
@@ -115,14 +115,6 @@ h3:first-child {
 .attribution img.aip-logo {
     width: 75%;
     margin-left: 10%;
-}
-.site-form button:first-child {
-    padding-left: 15px;
-    padding-right: 20px;
-}
-.site-form button:last-child {
-    padding-left: 20px;
-    padding-right: 15px;
 }
 
 .sidebar h2 {
