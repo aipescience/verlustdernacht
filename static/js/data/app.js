@@ -1,6 +1,6 @@
-app = angular.module('data',['ngResource']);
+app = angular.module('data',['ngResource'])
 
-app.config(['$httpProvider', '$interpolateProvider', '$locationProvider', '$resourceProvider', function($httpProvider, $interpolateProvider, $locationProvider, $resourceProvider) {
+.config(['$httpProvider', '$interpolateProvider', '$locationProvider', '$resourceProvider', function($httpProvider, $interpolateProvider, $locationProvider, $resourceProvider) {
     $interpolateProvider.startSymbol('{$');
     $interpolateProvider.endSymbol('$}');
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -11,4 +11,11 @@ app.config(['$httpProvider', '$interpolateProvider', '$locationProvider', '$reso
         method: 'GET',
         isArray: false
     };
+}])
+
+.controller('DataController', ['$scope','DataService',function($scope, DataService) {
+
+    $scope.service = DataService;
+    $scope.service.init();
+
 }]);

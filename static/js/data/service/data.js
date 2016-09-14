@@ -117,7 +117,7 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
 
     service.fetchNight = function() {
 
-        plot_service.clear();
+        service.plot.clear();
 
         service.loading = true;
         service.no_data = false;
@@ -167,7 +167,7 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
     service.fetchMonth = function() {
         service.updateLocation();
 
-        plot_service.clear();
+        service.plot.clear();
 
         service.loading = true;
         service.no_data = false;

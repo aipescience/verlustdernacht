@@ -2,10 +2,11 @@
 {% load staticfiles %}
 
 {% block head %}
-    <script type="text/javascript" src="{% static 'js/app.js' %}" ></script>
-    <script type="text/javascript" src="{% static 'js/service/data.js' %}" ></script>
-    <script type="text/javascript" src="{% static 'js/service/plot.js' %}" ></script>
-    <script type="text/javascript" src="{% static 'js/controller.js' %}" ></script>
+    <base href="{% url 'data' %}" />
+
+    <script type="text/javascript" src="{% static 'js/data/app.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'js/data/service/data.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'js/data/service/plot.js' %}" ></script>
 {% endblock %}
 
 {% block content %}

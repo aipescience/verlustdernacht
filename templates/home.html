@@ -1,14 +1,33 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
+{% block head %}
+    <script type="text/javascript" src="{% static 'js/home/app.js' %}" ></script>
+{% endblock %}
+
 {% block content %}
 
 <div class="row">
     <div class="col-md-4">
-        <h3>Potsdam-Babelsberg letzte Nacht</h3>
-        <div class="box home-plot">
+
+        <div ng-app="home" ng-controller="HomeController">
+            <h3>
+                <span>{$ service.location.name $}</span>
+                <span ng-show="service.today">heute Nacht</span>
+                <span ng-show="!service.today">letzte Nacht</span>
+            </h3>
+
+            <div class="plot-canvas box" ng-click="service.data()">
+                <div class="plot-label">
+                    <span ng-show="service.no_data">Keine Daten vorhanden</span>
+                    <span ng-show="service.loading">Wird geladen</span>
+                </div>
+                <svg id="plot" viewBox="0 0 289 216" preserveAspectRatio="xMidYMid" />
+            </div>
         </div>
+
         <h3>Sponsored by</h3>
+
         <div class="attribution">
             <div class="pull-left">
                 <a href="http://www.aip.de">
