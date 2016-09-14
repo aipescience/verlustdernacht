@@ -18,19 +18,23 @@ a:hover {
     color: #f2fa61;
     text-decoration: none;
 }
+h1 {
+    font-size: 20px;
+    line-height: 20px;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
 h2 {
     font-size: 16px;
     line-height: 20px;
     margin-top: 0;
     margin-bottom: 10px;
-    font-weight: bold;
 }
 h3 {
-    font-size: 12px;
+    font-size: 14px;
     line-height: 20px;
     margin-top: 20px;
     margin-bottom: 5px;
-    font-weight: normal;
 }
 h3:first-child {
     margin-top: 0;
