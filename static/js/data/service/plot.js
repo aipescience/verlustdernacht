@@ -245,7 +245,7 @@ app.factory('PlotService', ['$window', '$filter', function($window, $filter) {
                         xmax = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 9);
 
                     var xScale = d3.scaleUtc().domain([xmin, xmax]).range([0, night_width]),
-                        yScale = d3.scaleLinear().domain([22, 4]).range([night_height, 0]);
+                        yScale = d3.scaleLinear().domain([22, 2]).range([night_height, 0]);
 
                     var line = d3.line()
                         .x(function (d) { return xScale(new Date(d.timestamp)); })
