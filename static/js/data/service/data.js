@@ -1,5 +1,7 @@
 app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', function($resource, $q, $location, PlotService) {
 
+    moment.locale('de');
+
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
     var staticurl = angular.element('meta[name="staticurl"]').attr('content');
 

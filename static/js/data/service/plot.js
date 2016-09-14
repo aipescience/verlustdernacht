@@ -219,7 +219,6 @@ app.factory('PlotService', ['$window', '$filter', function($window, $filter) {
             .attr('width', night_width)
             .attr('height', night_height);
 
-
         g.append('rect')
             .attr('x', '0')
             .attr('y', '0')
@@ -230,7 +229,7 @@ app.factory('PlotService', ['$window', '$filter', function($window, $filter) {
             .attr('x', 5)
             .attr('y', 15)
             .text(function(night) {
-                return $filter('date')(night.date);
+                return moment(night.date).format('dd., DD.MM.YYYY');
             });
 
         g.append('g').append("path")
