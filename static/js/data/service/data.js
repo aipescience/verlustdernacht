@@ -32,6 +32,8 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
         location: null,
         date: null,
         month: null,
+        loading: false,
+        no_data: false,
         axes: {
             xmin: new Date(2000, 1, 1, 15),
             xmax: new Date(2000, 1, 2, 9),

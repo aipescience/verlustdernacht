@@ -97,15 +97,17 @@ app = angular.module('home',['ngResource'])
             ymin = 22,
             ymax = 5;
 
-        var xScale = d3.time.scale.utc()
+        var xScale = d3.scaleUtc()
                         .domain([xmin, xmax])
                         .range([0, width]),
-            yScale = d3.scale.linear()
+            yScale = d3.scaleLinear()
                         .domain([ymin, ymax])
                         .range([height, 0]);
 
-        var xAxis = d3.svg.axis().scale(xScale).ticks(4).tickFormat(d3.time.format('%H:00')),
-            yAxis = d3.svg.axis().ticks(4).scale(yScale);
+        var xAxis_bottom = d3.axisBottom(xScale).ticks(4).tickFormat(d3.timeFormat('%H:00')),
+            xAxis_top = d3.axisTop(xScale).ticks(4).tickFormat(''),
+            yAxis_left = d3.axisLeft(yScale).ticks(4),
+            yAxis_right = d3.axisRight(yScale).ticks(4).tickFormat('');
 
         var plot = d3.select('#plot')
             .append("g")
@@ -124,24 +126,24 @@ app = angular.module('home',['ngResource'])
         var area = plot.append('g')
             .attr('clip-path', 'url(' + $window.location.href + '#clip)');
 
-        plot.append('g').call(yAxis.orient('left'))
+        plot.append('g').call(yAxis_left)
             .attr('class', 'axis')
+            .attr('fill', '#fff')
             .attr('transform', 'translate(0, 0)');
-        plot.append('g').call(yAxis.orient('right').tickFormat(''))
+        plot.append('g').call(yAxis_right)
             .attr('class', 'axis')
             .attr('transform', 'translate(' + width + ', 0)');
 
-        plot.append('g').call(xAxis.orient('bottom'))
+        plot.append('g').call(xAxis_bottom)
             .attr('class', 'axis')
             .attr('transform', 'translate(0,' + height + ')');
-        plot.append('g').call(xAxis.orient('top').tickFormat(''))
+        plot.append('g').call(xAxis_top)
             .attr('class', 'axis')
             .attr('transform', 'translate(0,0)');
 
-        var line = d3.svg.line()
+        var line = d3.line()
             .x(function (d) { return xScale(new Date(d.timestamp)); })
-            .y(function (d) { return yScale(d['magnitude']); })
-            .interpolate('basis');
+            .y(function (d) { return yScale(d['magnitude']); });
 
         area.append('g').append("path")
             .attr("d", line(service.measurements))

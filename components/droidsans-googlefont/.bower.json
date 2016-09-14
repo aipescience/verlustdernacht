@@ -1,0 +1,27 @@
+{
+  "name": "droidsans-googlefont",
+  "license": "APACHE2",
+  "authors": [
+    "Steve Matteson"
+  ],
+  "homepage": "https://fonts.google.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/google-fonts-bower/droidsans-bower.git"
+  },
+  "description": "Droid Sans font",
+  "keywords": [
+    "font",
+    "SANS_SERIF"
+  ],
+  "_release": "3471f6e940",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "3471f6e940f41ad80c4b081e6adbe9288d59fdef"
+  },
+  "_source": "https://github.com/google-fonts-bower/droidsans-bower.git",
+  "_target": "*",
+  "_originalSource": "droidsans-googlefont",
+  "_direct": true
+}

@@ -1,13 +1,9 @@
 body {
-    color: #fff;
     background-color: #555555;
     background-image: url('../img/background_555555.jpg');
     background-repeat: repeat-x;
     height: 100%;
-}
-p {
-    font-size: 12px;
-    color: #aaa;
+    font-size: 13px;
 }
 a,
 a:visited,
@@ -19,10 +15,11 @@ a:hover {
     text-decoration: none;
 }
 h1 {
+    height: 20px;
     font-size: 20px;
     line-height: 20px;
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 h2 {
     font-size: 16px;
@@ -31,10 +28,11 @@ h2 {
     margin-bottom: 10px;
 }
 h3 {
-    font-size: 14px;
+    height: 20px;
+    font-size: 16px;
     line-height: 20px;
     margin-top: 20px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 h3:first-child {
     margin-top: 0;
@@ -157,4 +155,8 @@ h3:first-child {
 }
 .data-table td:last-child {
     width: 40%;
+}
+
+.loading {
+    font-size: 32px;
 }

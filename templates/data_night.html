@@ -1,13 +1,19 @@
     <div class="col-md-12">
-        <h1>Daten für {$ service.location.name $} am {$ service.date | date: 'fullDate' $}</h1>
+        <h1>
+            <span ng-show="service.date" ng-cloak>
+                Daten für {$ service.location.name $} am {$ service.date | date: 'fullDate' $}
+            </span>
+        </h1>
     </div>
 
     <div class="col-md-9">
 
         <div class="plot-canvas box">
             <div class="plot-label">
-                <span ng-show="service.no_data">Keine Daten vorhanden</span>
-                <span ng-show="service.loading">Wird geladen</span>
+                <span ng-show="service.no_data" ng-cloak>Keine Daten vorhanden</span>
+                <span ng-show="service.loading">
+                    <i class="fa fa-spinner fa-spin fa-circle-o-notch loading" aria-hidden="true"></i>
+                </span>
             </div>
             <svg id="plot" viewBox="0 0 688.5 688.5" preserveAspectRatio="xMidYMid" />
         </div>

@@ -8,6 +8,8 @@ app.factory('PlotService', ['$window', '$filter', function($window, $filter) {
 
     plot_service.drawNight = function(service) {
 
+        service.plot.clear();
+
         if (service.measurements.length === 0) return;
 
         var margin = {top: 50, right: 30, bottom: 50, left: 60},
@@ -24,23 +26,26 @@ app.factory('PlotService', ['$window', '$filter', function($window, $filter) {
             y2min = service.axes.y2min,
             y2max = service.axes.y2max;
 
-        var xScale = d3.time.scale.utc()
+        var xScale = d3.scaleUtc()
                         .domain([xmin, xmax])
                         .range([0, width]),
-            x2Scale = d3.scale.linear()
+            x2Scale = d3.scaleLinear()
                         .domain([x2min, x2max])
                         .range([0, width]),
-            yScale = d3.scale.linear()
+            yScale = d3.scaleLinear()
                         .domain([ymin, ymax])
                         .range([height - separator, 0]),
-            y2Scale = d3.scale.linear()
+            y2Scale = d3.scaleLinear()
                         .domain([y2min, y2max])
                         .range([height, height - separator]);
 
-        var xAxis = d3.svg.axis().scale(xScale).ticks(6).tickFormat(d3.time.format('%H:00')),
-            x2Axis = d3.svg.axis().scale(x2Scale),
-            yAxis = d3.svg.axis().scale(yScale),
-            y2Axis = d3.svg.axis().ticks(4).scale(y2Scale);
+        var xAxis_bottom = d3.axisBottom(xScale).ticks(6).tickFormat(d3.timeFormat('%H:00')),
+            xAxis_seperator = d3.axisBottom(xScale).ticks(6).tickFormat(''),
+            x2Axis_top = d3.axisTop(x2Scale),
+            yAxis_left = d3.axisLeft(yScale),
+            yAxis_right = d3.axisRight(yScale).tickFormat(''),
+            y2Axis_left = d3.axisLeft(y2Scale).ticks(4),
+            y2Axis_right = d3.axisRight(y2Scale).ticks(4).tickFormat('');
 
         var x = {};
         angular.forEach(['sunset', 'sunrise', 'civil_dusk', 'civil_dawn', 'nautical_dusk', 'nautical_dawn', 'astronomical_dusk', 'astronomical_dawn', 'nadir'], function (key) {
@@ -99,27 +104,27 @@ app.factory('PlotService', ['$window', '$filter', function($window, $filter) {
                 .attr('class', 'night');
         }
 
-        plot.append('g').call(xAxis.orient('bottom'))
+        plot.append('g').call(xAxis_bottom)
             .attr('class', 'axis')
             .attr('transform', 'translate(0,' + height + ')');
-        plot.append('g').call(xAxis.orient('bottom').tickFormat(''))
+        plot.append('g').call(xAxis_seperator)
             .attr('class', 'axis')
             .attr('transform', 'translate(0,' + (height - separator) + ')');
-        plot.append('g').call(x2Axis.orient('top'))
+        plot.append('g').call(x2Axis_top)
             .attr('class', 'axis')
             .attr('transform', 'translate(0,0)');
 
-        plot.append('g').call(yAxis.orient('left'))
+        plot.append('g').call(yAxis_left)
             .attr('class', 'axis')
             .attr('transform', 'translate(0, 0)');
-        plot.append('g').call(yAxis.orient('right').tickFormat(''))
+        plot.append('g').call(yAxis_right)
             .attr('class', 'axis')
             .attr('transform', 'translate(' + width + ', 0)');
 
-        plot.append('g').call(y2Axis.orient('left'))
+        plot.append('g').call(y2Axis_left)
             .attr('class', 'axis')
             .attr('transform', 'translate(0, 0)');
-        plot.append('g').call(y2Axis.orient('right').tickFormat(''))
+        plot.append('g').call(y2Axis_right)
             .attr('class', 'axis')
             .attr('transform', 'translate(' + width + ', 0)');
 
@@ -147,15 +152,13 @@ app.factory('PlotService', ['$window', '$filter', function($window, $filter) {
             .attr('class', 'axis')
             .text('Höhe des Mondes');
 
-        var line = d3.svg.line()
+        var line = d3.line()
             .x(function (d) { return xScale(new Date(d.timestamp)); })
-            .y(function (d) { return yScale(d['magnitude']); })
-            .interpolate('basis');
+            .y(function (d) { return yScale(d['magnitude']); });
 
-        var line2 = d3.svg.line()
+        var line2 = d3.line()
             .x(function (d) { return xScale(new Date(d.timestamp)); })
-            .y(function (d) { return y2Scale(d['altitude']); })
-            .interpolate('basis');
+            .y(function (d) { return y2Scale(d['altitude']); });
 
         area.append('g').append("path")
             .attr("d", line(service.measurements))
@@ -230,11 +233,6 @@ app.factory('PlotService', ['$window', '$filter', function($window, $filter) {
                 return $filter('date')(night.date);
             });
 
-        var line = d3.svg.line()
-            .x(function (d) { return xScale(new Date(d.timestamp)); })
-            .y(function (d) { return yScale(d['magnitude']); })
-            .interpolate('basis');
-
         g.append('g').append("path")
             .attr('class', 'data')
             .attr('clip-path', function(night) {
@@ -246,10 +244,10 @@ app.factory('PlotService', ['$window', '$filter', function($window, $filter) {
                     var xmin = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 15),
                         xmax = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 9);
 
-                    var xScale = d3.time.scale.utc().domain([xmin, xmax]).range([0, night_width]),
-                        yScale = d3.scale.linear().domain([22, 4]).range([night_height, 0]);
+                    var xScale = d3.scaleUtc().domain([xmin, xmax]).range([0, night_width]),
+                        yScale = d3.scaleLinear().domain([22, 4]).range([night_height, 0]);
 
-                    var line = d3.svg.line()
+                    var line = d3.line()
                         .x(function (d) { return xScale(new Date(d.timestamp)); })
                         .y(function (d) { return yScale(d['magnitude']); });
 
