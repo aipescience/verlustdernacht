@@ -116,6 +116,12 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
     };
 
     service.fetchNight = function() {
+
+        plot_service.clear();
+
+        service.loading = true;
+        service.no_data = false;
+
         if (angular.isDefined(service.date) && service.date) {
             resources.nights.paginate({
                 location: service.location.slug,
@@ -129,10 +135,11 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
                     service.updateAxes();
                     service.fetchMeasurements();
                 } else {
+                    service.loading = false;
+                    service.no_data = true;
                     service.night = false;
                     service.moon_url = false;
                     service.updateLocation();
-                    service.measurements = [];
                 }
             });
         } else {
@@ -149,6 +156,8 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
                 service.updateAxes();
                 service.fetchMeasurements();
             }, function() {
+                service.loading = false;
+                service.no_data = true;
                 service.night = false;
                 service.date = false;
             });
@@ -157,6 +166,11 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
 
     service.fetchMonth = function() {
         service.updateLocation();
+
+        plot_service.clear();
+
+        service.loading = true;
+        service.no_data = false;
 
         service.nights = [];
 
@@ -187,6 +201,7 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
         });
 
         $q.all(promises).then(function() {
+            service.loading = false;
             service.plot.drawMonth(service, function(night) {
                 service.showNight(night);
             });
@@ -214,6 +229,7 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
         }).$promise;
 
         $q.all([measurements_promise, moonpositions_promise]).then(function() {
+            service.loading = false;
             service.plot.drawNight(service);
         });
     };

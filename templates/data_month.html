@@ -1,7 +1,11 @@
     <div class="col-md-12">
         <h2>Übersicht für {$ service.location.name $} im {$ service.month | date : 'MMMM yyyy'$}</h2>
 
-        <div class="plot-canvas">
+        <div class="plot-canvas box">
+            <div class="plot-label">
+                <span ng-show="service.no_data">Keine Daten vorhanden</span>
+                <span ng-show="service.loading">Wird geladen</span>
+            </div>
             <svg id="plot-month" viewBox="0 0 926 694.5" preserveAspectRatio="xMidYMid" />
         </div>
     </div>

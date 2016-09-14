@@ -128,7 +128,7 @@ h3:first-child {
     position: relative;
     margin-bottom: 20px;
 }
-.plot-label-empty {
+.plot-label {
     position: absolute;
     top: 45%;
     width: 100%;

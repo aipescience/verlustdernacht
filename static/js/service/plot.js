@@ -2,9 +2,11 @@ app.factory('PlotService', ['$window', '$filter', function($window, $filter) {
 
     plot_service = {};
 
-    plot_service.drawNight = function(service) {
-
+    plot_service.clear = function() {
         d3.selectAll("svg > *").remove();
+    };
+
+    plot_service.drawNight = function(service) {
 
         if (service.measurements.length === 0) return;
 
@@ -166,12 +168,9 @@ app.factory('PlotService', ['$window', '$filter', function($window, $filter) {
 
     plot_service.drawMonth = function(service, callback) {
 
-        d3.selectAll("svg > *").remove();
-
-        var margin = {top: 0, right: 0, bottom: 0, left: 0},
+        var margin = {top: 5, right: 5, bottom: 5, left: 5},
             width = 926 - margin.left - margin.right,
             height = 694.5 - margin.top - margin.bottom,
-            separator = height * 0.2,
             night_margin = 5,
             night_width = (width - 6 * night_margin) / 7.0,
             night_height = (height - 5 * night_margin) / 6.0;

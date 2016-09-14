@@ -5,8 +5,9 @@
     <div class="col-md-9">
 
         <div class="plot-canvas box">
-            <div class="plot-label-empty" ng-show="service.count == 0">
-                Keine Daten vorhanden
+            <div class="plot-label">
+                <span ng-show="service.no_data">Keine Daten vorhanden</span>
+                <span ng-show="service.loading">Wird geladen</span>
             </div>
             <svg id="plot" viewBox="0 0 688.5 688.5" preserveAspectRatio="xMidYMid" />
         </div>
