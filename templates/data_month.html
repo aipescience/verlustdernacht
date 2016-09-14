@@ -1,6 +1,28 @@
     <div class="col-md-12">
         <h2>Übersicht für {$ service.location.name $} im {$ service.month | date : 'MMMM yyyy'$}</h2>
 
+        <div class="row">
+            <div class="col-md-9">
+                <div class="form-group">
+                    <button class="btn btn-default" ng-click="service.previousMonth()">
+                        Vorheriger Monat
+                    </button>
+                    <button class="btn btn-default" ng-click="service.nextMonth()">
+                        Nächster Monat
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <select id="site" class="form-control"
+                        ng-model="service.location"
+                        ng-options="location as location.name for location in service.locations"
+                        ng-change="service.initView()">
+                    </select>
+                </div>
+            </div>
+        </div>
+
         <div class="plot-canvas box">
             <div class="plot-label">
                 <span ng-show="service.no_data">Keine Daten vorhanden</span>

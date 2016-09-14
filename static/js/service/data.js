@@ -234,7 +234,7 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
         });
     };
 
-    service.prev = function() {
+    service.previousNight = function() {
         var date = angular.copy(service.date);
         date.setDate(date.getDate() - 1);
 
@@ -242,7 +242,7 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
         service.fetchNight();
     };
 
-    service.next = function() {
+    service.nextNight = function() {
         var date = angular.copy(service.date);
         date.setDate(date.getDate() + 1);
 
@@ -254,6 +254,22 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
         service.date = new Date(night.date);
         service.month = false;
         service.fetchNight();
+    };
+
+    service.previousMonth = function() {
+        var month = angular.copy(service.month);
+        month.setMonth(month.getMonth() - 1);
+
+        service.month = month;
+        service.fetchMonth();
+    };
+
+    service.nextMonth = function() {
+        var month = angular.copy(service.month);
+        month.setMonth(month.getMonth() + 1);
+
+        service.month = month;
+        service.fetchMonth();
     };
 
     service.showMonth = function() {

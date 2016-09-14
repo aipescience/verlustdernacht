@@ -241,18 +241,22 @@ app.factory('PlotService', ['$window', '$filter', function($window, $filter) {
                 return 'url(' + $window.location.href + '#clip' + night.id + ')';
             })
             .attr("d", function(night) {
-                var date = new Date(night.date);
-                var xmin = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 15),
-                    xmax = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 9);
+                if (angular.isDefined(night.measurements) && night.measurements.length > 0) {
+                    var date = new Date(night.date);
+                    var xmin = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 15),
+                        xmax = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 9);
 
-                var xScale = d3.time.scale.utc().domain([xmin, xmax]).range([0, night_width]),
-                    yScale = d3.scale.linear().domain([22, 4]).range([night_height, 0]);
+                    var xScale = d3.time.scale.utc().domain([xmin, xmax]).range([0, night_width]),
+                        yScale = d3.scale.linear().domain([22, 4]).range([night_height, 0]);
 
-                var line = d3.svg.line()
-                    .x(function (d) { return xScale(new Date(d.timestamp)); })
-                    .y(function (d) { return yScale(d['magnitude']); });
+                    var line = d3.svg.line()
+                        .x(function (d) { return xScale(new Date(d.timestamp)); })
+                        .y(function (d) { return yScale(d['magnitude']); });
 
-                return line(night.measurements);
+                    return line(night.measurements);
+                } else {
+                    return '';
+                }
             });
     };
 
