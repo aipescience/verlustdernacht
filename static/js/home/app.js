@@ -95,7 +95,7 @@ app = angular.module('home',['ngResource'])
                             service.date.getMonth(),
                             service.date.getDate() + 1, 9),
             ymin = 22,
-            ymax = 6;
+            ymax = 5;
 
         var xScale = d3.time.scale.utc()
                         .domain([xmin, xmax])
