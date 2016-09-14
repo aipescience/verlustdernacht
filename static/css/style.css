@@ -108,6 +108,11 @@ h3:first-child {
 .data-form {
     height: 200px;
 }
+.date-button {
+    width: 100%;
+    text-align: center;
+}
+
 .attribution > div {
     width: 48%;
 }

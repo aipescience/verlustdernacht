@@ -37,15 +37,21 @@
                 ng-model="service.date"
                 ng-change="service.fetchNight()"></input>
         </div>
-        <div class="form-group text-center">
-            <button class="btn btn-default pull-left" ng-click="service.previousNight()">
-                <span class="glyphicon glyphicon-backward"></span>
-            </button>
-            <button class="btn btn-default" ng-click="service.showMonth()">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <button class="btn btn-default date-button" ng-click="service.previousNight()">
+                    <span class="glyphicon glyphicon-backward"></span>
+                </button>
+            </div>
+            <div class="form-group col-md-6">
+                <button class="btn btn-default date-button" ng-click="service.nextNight()">
+                    <span class="glyphicon glyphicon-forward"></span>
+                </button>
+            </div>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-default date-button" ng-click="service.showMonth()">
                 <span>Ganzer Monat</span>
-            </button>
-            <button class="btn btn-default pull-right" ng-click="service.nextNight()">
-                <span class="glyphicon glyphicon-forward"></span>
             </button>
         </div>
 

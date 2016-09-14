@@ -39,10 +39,22 @@ app = angular.module('home',['ngResource'])
                 }, function(response) {
                     service.night = response[0];
                     service.date = new Date(service.night.date);
-                    service.today = (service.date === new Date());
 
-                    var after = new Date(service.date.getFullYear(), service.date.getMonth(), service.date.getDate(), 12),
-                        before = new Date(service.date.getFullYear(), service.date.getMonth(), service.date.getDate() + 1, 12);
+                    var now = new Date();
+                    if (service.date.getDate() === now.getDate() &&
+                        service.date.getMonth() === now.getMonth() &&
+                        service.date.getYear() === now.getYear()) {
+                        service.today = true;
+                    } else {
+                        service.today = false;
+                    }
+
+                    var after = new Date(service.date.getFullYear(),
+                                         service.date.getMonth(),
+                                         service.date.getDate(), 12),
+                        before = new Date(service.date.getFullYear(),
+                                          service.date.getMonth(),
+                                          service.date.getDate() + 1, 12);
 
                     resources.measurements.paginate({
                         location: service.location.slug,
