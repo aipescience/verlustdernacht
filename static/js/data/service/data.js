@@ -102,6 +102,13 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
         }
     };
 
+    service.updateDate = function () {
+        if (angular.isDefined(service.inputDate) && service.inputDate && moment(service.inputDate).isValid()) {
+            service.date = service.inputDate;
+            service.fetchNight();
+        }
+    };
+
     service.updateAxes = function() {
         service.axes.xmin = new Date(
             service.date.getFullYear(),
@@ -134,6 +141,8 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
             }, function(response) {
                 if (response.nights.length) {
                     service.night = response.nights[0];
+                    service.inputDate = service.date;
+
                     service.moon_url = getMoonUrl(service.night.moon_phase);
                     service.updateLocation();
                     service.updateAxes();
@@ -154,6 +163,7 @@ app.factory('DataService', ['$resource', '$q', '$location', 'PlotService', funct
             }, function(response) {
                 service.night = response[0];
                 service.date = new Date(service.night.date);
+                service.inputDate = service.date;
 
                 service.moon_url = getMoonUrl(service.night.moon_phase);
                 service.updateLocation();
