@@ -27,14 +27,15 @@ class AbstractPagination(BasePagination):
 
     def filter_before(self, queryset, request):
         self.before = request.GET.get('before')
-        if self.before:
-            queryset = queryset.filter(timestamp__lt=self.before)
+        if not self.before:
+            self.before = timezone.now()
+        queryset = queryset.filter(timestamp__lt=self.before)
         return queryset
 
     def filter_after(self, queryset, request):
         self.after = request.GET.get('after')
         if not self.after:
-            self.after = timezone.now() - timedelta(days=1)
+            self.after = timezone.now() - timedelta(hours=1)
         queryset = queryset.filter(timestamp__gt=self.after)
         return queryset
 
@@ -73,14 +74,16 @@ class NightPagination(AbstractPagination):
 
     def filter_before(self, queryset, request):
         self.before = request.GET.get('before')
-        if self.before:
-            queryset = queryset.filter(date__lte=self.before)
+        if not self.before:
+            self.before = timezone.now()
+        queryset = queryset.filter(date__lte=self.before)
         return queryset
 
     def filter_after(self, queryset, request):
         self.after = request.GET.get('after')
-        if self.after:
-            queryset = queryset.filter(date__gte=self.after)
+        if not self.after:
+            self.after = timezone.now() - timedelta(days=7)
+        queryset = queryset.filter(date__gte=self.after)
         return queryset
 
     def filter_every(self, queryset, request):

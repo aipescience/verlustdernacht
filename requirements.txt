@@ -1,6 +1,8 @@
-Django==1.9
+Django>2
 djangorestframework
-psycopg2
+django-extensions
+django-vendor-files
+psycopg2-binary
 astropy
 astroplan
 pytz

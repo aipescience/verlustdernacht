@@ -30,13 +30,20 @@ class NightViewSet(ReadOnlyModelViewSet):
 
     @list_route(methods=['get'])
     def latest(self, request):
+        location_slug = request.GET.get('location')
+        if location_slug:
+            try:
+                location = Location.objects.get(slug=location_slug)
+            except Location.DoesNotExist:
+                location = None
+        else:
+            location = None
 
         try:
-            location = request.GET.get('location')
-            if request.GET.get('location'):
-                night = Night.objects.filter(location__slug=location).latest('date')
-            else:
+            if location is None:
                 night = Night.objects.latest('date')
+            else:
+                night = Night.objects.filter(location=location).latest('date')
         except Night.DoesNotExist:
             return Response('Error: No latest night could be found.', status=404)
 
@@ -51,13 +58,20 @@ class MeasurementViewSet(ReadOnlyModelViewSet):
 
     @list_route(methods=['get'])
     def latest(self, request):
+        location_slug = request.GET.get('location')
+        if location_slug:
+            try:
+                location = Location.objects.get(slug=location_slug)
+            except Location.DoesNotExist:
+                location = None
+        else:
+            location = None
 
         try:
-            location = request.GET.get('location')
-            if request.GET.get('location'):
-                measurement = Measurement.objects.filter(location__slug=location).latest('timestamp')
-            else:
+            if location is None:
                 measurement = Measurement.objects.latest('timestamp')
+            else:
+                measurement = Measurement.objects.filter(location=location).latest('timestamp')
         except Measurement.DoesNotExist:
             return Response('Error: No latest measurement could be found.', status=404)
 

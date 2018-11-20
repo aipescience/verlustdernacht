@@ -31,7 +31,7 @@ class Night(models.Model):
 
     date = models.DateField(db_index=True)
     mjd = models.IntegerField(null=True, blank=True)
-    location = models.ForeignKey(Location)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     moon_phase = models.FloatField(null=True, blank=True)
 
@@ -124,7 +124,7 @@ class Measurement(models.Model):
     counts = models.IntegerField(null=True, blank=True)
     period = models.FloatField(null=True, blank=True)
     temperature = models.FloatField(null=True, blank=True)
-    location = models.ForeignKey(Location)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.timestamp.isoformat()
@@ -134,7 +134,7 @@ class MoonPosition(models.Model):
 
     timestamp = models.DateTimeField(db_index=True)
     altitude = models.FloatField()
-    location = models.ForeignKey(Location)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.timestamp.isoformat()

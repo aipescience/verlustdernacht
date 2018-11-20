@@ -1,10 +1,11 @@
-verlustdernacht/settings/local.py
+config/settings/local.py
 
 *~
+*-
 *.pyc
 .DS_Store
 
 static_root
+vendor
 
 env
-env3

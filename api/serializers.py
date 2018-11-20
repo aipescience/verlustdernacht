@@ -7,12 +7,14 @@ class LocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Location
+        fields = '__all__'
 
 
 class NightSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Night
+        fields = '__all__'
 
 
 class MeasurementSerializer(serializers.ModelSerializer):
