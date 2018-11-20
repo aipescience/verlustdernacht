@@ -46,6 +46,9 @@ class Night(models.Model):
     astronomical_dusk = models.DateTimeField(null=True, blank=True)
     astronomical_dawn = models.DateTimeField(null=True, blank=True)
 
+    class Meta():
+        ordering = ('date', 'location')
+
     def __str__(self):
         return str(self.location) + ' ' + str(self.date)
 
@@ -126,6 +129,9 @@ class Measurement(models.Model):
     temperature = models.FloatField(null=True, blank=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
+    class Meta():
+        ordering = ('timestamp', 'location')
+
     def __str__(self):
         return self.timestamp.isoformat()
 
@@ -135,6 +141,9 @@ class MoonPosition(models.Model):
     timestamp = models.DateTimeField(db_index=True)
     altitude = models.FloatField()
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
+
+    class Meta():
+        ordering = ('timestamp', 'location')
 
     def __str__(self):
         return self.timestamp.isoformat()
