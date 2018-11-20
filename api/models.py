@@ -101,7 +101,7 @@ def post_save_night(sender, **kwargs):
         post_save.connect(post_save_night, sender=sender)
 
         moon_positions = []
-        for i in xrange(144):
+        for i in range(144):
             moon_altitude = observer.moon_altaz(astropy_time).alt.degree
 
             moon_position = MoonPosition(
