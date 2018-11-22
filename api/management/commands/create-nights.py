@@ -19,6 +19,6 @@ class Command(BaseCommand):
 
         date = start_date
         while date <= end_date:
-            print date.strftime('%Y-%m-%d')
+            print(date.strftime('%Y-%m-%d'))
             create_night(options['location'], date.strftime('%Y-%m-%d'))
             date += timedelta(1)
