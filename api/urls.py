@@ -1,15 +1,16 @@
-from django.conf.urls import url, include
+from django.urls import include, path
 
 from rest_framework import routers
 
 from .views import *
 
 router = routers.DefaultRouter()
-router.register(r'locations', LocationViewSet, base_name='location')
-router.register(r'nights', NightViewSet, base_name='night')
-router.register(r'measurements', MeasurementViewSet, base_name='measurement')
-router.register(r'moonpositions', MoonPositionViewSet, base_name='moonposition')
+# router.register(r'locations', LocationViewSet.as_view(), basename='locations')
+router.register(r'nights', NightViewSet.as_view(), basename='night')
+router.register(r'measurements', MeasurementViewSet.as_view(), basename='measurement')
+router.register(r'moonpositions', MoonPositionViewSet.as_view(), basename='moonposition')
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    # rest api
+    path('api/', include(router.urls)),
 ]

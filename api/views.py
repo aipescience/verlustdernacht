@@ -2,7 +2,7 @@ import dateutil.parser
 
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import list_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import *
@@ -10,10 +10,9 @@ from .serializers import *
 from .pagination import *
 
 
-class LocationViewSet(ReadOnlyModelViewSet):
-    queryset = Location.objects.all()
-    serializer_class = LocationSerializer
-
+# class LocationViewSet(ReadOnlyModelViewSet):
+#     queryset = Location.objects.all()
+#    serializer_class = LocationSerializer
 
 class NightViewSet(ReadOnlyModelViewSet):
     serializer_class = NightSerializer
@@ -28,7 +27,7 @@ class NightViewSet(ReadOnlyModelViewSet):
 
         return queryset
 
-    @list_route(methods=['get'])
+    @action(detail=True, methods=['GET'])
     def latest(self, request):
         location_slug = request.GET.get('location')
         if location_slug:
@@ -56,8 +55,9 @@ class MeasurementViewSet(ReadOnlyModelViewSet):
     serializer_class = MeasurementSerializer
     pagination_class = MeasurementPagination
 
-    @list_route(methods=['get'])
+    @action(detail=True, methods=['get'])
     def latest(self, request):
+    # def get(self, request, resource=None): 
         location_slug = request.GET.get('location')
         if location_slug:
             try:
@@ -78,7 +78,7 @@ class MeasurementViewSet(ReadOnlyModelViewSet):
         serializer = self.get_serializer(measurement)
         return Response(serializer.data)
 
-    @list_route(methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def ingest(self, request):
 
         try:
