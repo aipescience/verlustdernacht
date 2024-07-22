@@ -6,9 +6,10 @@ from .views import *
 
 router = routers.DefaultRouter()
 # router.register(r'locations', LocationViewSet.as_view(), basename='locations')
-router.register(r'nights', NightViewSet.as_view(), basename='night')
-router.register(r'measurements', MeasurementViewSet.as_view(), basename='measurement')
-router.register(r'moonpositions', MoonPositionViewSet.as_view(), basename='moonposition')
+# router.register(r'nights', NightViewSet.as_view({'get': 'list'}), basename='night')
+router.register(r'nights', NightViewSet, basename='night')
+router.register(r'measurements', MeasurementViewSet, basename='measurement')
+router.register(r'moonpositions', MoonPositionViewSet, basename='moonposition')
 
 urlpatterns = [
     # rest api
